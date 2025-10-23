@@ -23,19 +23,30 @@
         <br>
         <textarea class="form-control" id="blogText" placeholder="Kirjoita blogiteksti tähän"></textarea>
         <br>
-        <button class="btn btn-primary" type="submit">Postaa</button>
+        <button class="btn btn-primary" type="submit" onclick="CreateBlog()">Postaa</button>
     </form>
-    <div id="blogit">
+    <div class="mx-auto" id="blogit">
         
     </div>
     <script>
         function CreateBlog() {
-        const Blog_Full = document.createElement("div");
-        const New_Title = document.getElementById("blogTextTitle")
-        const New_BlogText = document.getElementById("blogText");
-        Blog_Full.appendChild(New_Title)
-        Blog_Full.appendChild(New_BlogText);
-        }
+            event.preventDefault()
+            const Blog_Full = document.createElement("div");
+            const New_Title = document.getElementById("blogTextTitle").value;
+            const New_BlogText = document.getElementById("blogText").value;
+
+            const TitleElement = document.createElement("h2");
+            TitleElement.textContent = New_Title
+
+            const TextElement = document.createElement("p");
+            TextElement.textContent = New_BlogText
+
+            Blog_Full.appendChild(TitleElement)
+            Blog_Full.appendChild(TextElement)
+
+            const Add_Blog = document.getElementById("blogit");
+            Add_Blog.appendChild(Blog_Full);
+            }
     </script>
     
 </body>
