@@ -15,7 +15,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 .Otsikko1 h1 {
@@ -23,4 +23,25 @@
     z-index: 2;
     font-size: 8rem;
     font-weight: bold;
+}
+.content-section {
+    padding: 20px;
+}
+.card {
+    margin-bottom: 20px;
+}
+.suositut {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+}
+.suositut h4 {
+    margin-bottom: 15px;
+}
+.suositut ul {
+    list-style: none;
+    padding-left: 0;
+}
+.suositut li {
+    margin-bottom: 10px;
 }
