@@ -24,8 +24,9 @@
     font-size: 8rem;
     font-weight: bold;
 }
-.content-section {
+.content-section .col-lg-8 {
     padding: 20px;
+    border-right: 1px solid #ddd;
 }
 .card {
     margin-bottom: 20px;
@@ -44,4 +45,17 @@
 }
 .suositut li {
     margin-bottom: 10px;
+}
+.suositut ul li a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    background-color: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+}
+.suositut ul li a:hover {
+    background-color: #e0e0e0;
+    transform: translateX(3px);
 }
