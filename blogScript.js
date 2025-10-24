@@ -54,21 +54,22 @@ function CreateBlog() {
         // Fonttikoko
         TitleElement.style.fontSize = "1.25em"
 
-        // Luodaan blogiteksti
-        const TextElement = document.createElement("p");
-        // Lisätään käyttäjän syöttämä blogiteksti
-
-        if (New_BlogText.length > 200) {
-            // Valitsee ensimmäiset 125 merkkiä ja lisää "..." loppuun
-            TextElement.textContent = New_BlogText.slice(0, 125) + "...";
-        } else { // Muuten teksti käyttäjän syötöstä
-            TextElement.textContent = New_BlogText;
-        } 
-        // Fonttikoko
-        TextElement.style.fontSize = "1em"
-
         // Jos kuva on liitetty:
         if (New_BlogImg) {
+                // Luodaan blogiteksti
+            const TextElement = document.createElement("p");
+            // Lisätään käyttäjän syöttämä blogiteksti
+
+            // Jos tekstin pituus enemmän kuin 125 merkkiä:
+            if (New_BlogText.length > 125) {
+                // Valitsee ensimmäiset 125 merkkiä ja lisää "..." loppuun
+                TextElement.textContent = New_BlogText.slice(0, 125) + "...";
+            } else { // Muuten teksti käyttäjän syötöstä
+                TextElement.textContent = New_BlogText;
+            } 
+            // Fonttikoko
+            TextElement.style.fontSize = "1em"
+
             // Filereader kuvan lukemista varten
             const reader = new FileReader();
 
@@ -105,13 +106,27 @@ function CreateBlog() {
             reader.readAsDataURL(New_BlogImg);
 
         } else { // Jos kuvaa ei ole liitetty
-                // Lisätään otsikko ja blogiteksti tekstialueeseen 
-                Blog_TextArea.appendChild(TitleElement);
-                Blog_TextArea.appendChild(TextElement);
+            // Luodaan blogiteksti
+            const TextElement = document.createElement("p");
+            // Lisätään käyttäjän syöttämä blogiteksti
 
-                // Lisätään tekstialue ja nappi korttiin
-                Blog_Full.appendChild(Blog_TextArea);
-                Blog_Full.appendChild(Blog_Button)
+            // Jos tekstin pituus enemmän kuin 225 merkkiä:
+            if (New_BlogText.length > 225) {
+                // Valitsee ensimmäiset 225 merkkiä ja lisää "..." loppuun
+                TextElement.textContent = New_BlogText.slice(0, 225) + "...";
+            } else { // Muuten teksti käyttäjän syötöstä
+                TextElement.textContent = New_BlogText;
+            } 
+            // Fonttikoko
+            TextElement.style.fontSize = "1em"
+
+            // Lisätään otsikko ja blogiteksti tekstialueeseen 
+            Blog_TextArea.appendChild(TitleElement);
+            Blog_TextArea.appendChild(TextElement);
+
+            // Lisätään tekstialue ja nappi korttiin
+            Blog_Full.appendChild(Blog_TextArea);
+            Blog_Full.appendChild(Blog_Button)
         }
         
         // Haetaan div, johon blogi lisätään
