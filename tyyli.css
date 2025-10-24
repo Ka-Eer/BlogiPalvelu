@@ -25,6 +25,7 @@
     font-size: 8rem;
     font-weight: bold;
 }
+/*Blogi kortit*/
 .content-section .col-lg-8 {
     padding: 20px;
     border-right: 1px solid #ddd;
@@ -59,4 +60,60 @@
 .suositut ul li a:hover {
     background-color: #e0e0e0;
     transform: translateX(3px);
+}
+/*Tykkäys nappi*/
+.like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+    user-select: none;
+}
+.heart-button {
+    width: 36px;
+    height: 36px;
+    padding: 4px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 150ms ease;
+}
+.heart-button:active {
+    transform: scale(0.95);
+}
+.heart-button svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 200ms ease, fill 200ms ease, stroke 200ms ease;
+    transform-origin: center;
+    stroke: #6c757d;
+    fill: transparent;
+    stroke-width: 1.5;
+}
+.heart-button.liked svg {
+    fill: #dc3545;
+    stroke: #dc3545;
+    transform: scale(1.05);
+}
+.heart-button.pop {
+    animation: pop .28s cubic-bezier(.2,.9,.2,1);
+}
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+.like-count {
+    font-weight: 600;
+    min-width: 22px;
+    text-align: left;
+    color: #212529;
+}
+.heart-button:focus {
+    outline: 2px solid rgba(13, 110, 253, 0.25);
+    outline-offset: 3px;
+    border-radius: 6px;
 }

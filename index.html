@@ -43,7 +43,11 @@
                                 <p class="card-text">Tämä on testi</p>
                                 <a href="#" class="btn btn-primary">Lue lisää</a>
                                 <span class="like-btn"> <!--Tykkäys nappi-->
-                                    <button class="like-button" data-id="1">Tykkää</button> <!--Tärkeää! data-id="" erottelee blogit toisistaan-->
+                                    <button class="heart-button" aria-pressed="false" title="Like" data-id="1" aria-label="Tykkää"> <!--Tärkeää! data-id="" erottelee blogit toisistaan-->
+                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button> 
                                     <span class="like-count" id="likes-1">0</span> <!--Tärkeää! id="likes-1" on data-id tavoin persoonallinen tälle blogi kortille-->
                                 </span>
                             </div>
@@ -58,7 +62,11 @@
                                 <p class="card-text">Tämä on testi</p>
                                 <a href="#" class="btn btn-primary">Lue lisää</a>
                                 <span class="like-btn">
-                                    <button class="like-button" data-id="2">Tykkää</button>
+                                    <button class="heart-button" aria-pressed="false" title="Like" data-id="2" aria-label="Tykkää">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button> 
                                     <span class="like-count" id="likes-2">0</span>
                                 </span>
                             </div>
@@ -73,7 +81,11 @@
                                 <p class="card-text">Tämä on testi</p>
                                 <a href="#" class="btn btn-primary">Lue lisää</a>
                                 <span class="like-btn">
-                                    <button class="like-button" data-id="3">Tykkää</button>
+                                    <button class="heart-button" aria-pressed="false" title="Like" data-id="3" aria-label="Tykkää">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button> 
                                     <span class="like-count" id="likes-3">0</span>
                                 </span>
                             </div>
@@ -88,7 +100,11 @@
                                 <p class="card-text">Tämä on testi</p>
                                 <a href="#" class="btn btn-primary">Lue lisää</a>
                                 <span class="like-btn">
-                                    <button class="like-button" data-id="4">Tykkää</button>
+                                    <button class="heart-button" aria-pressed="false" title="Like" data-id="4" aria-label="Tykkää">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button> 
                                     <span class="like-count" id="likes-4">0</span>
                                 </span>
                             </div>
@@ -112,14 +128,40 @@
     </div>
 
     <script>
-        document.querySelectorAll('.like-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const id = button.getAttribute('data-id');
-                const countSpan = document.getElementById(`likes-${id}`);
-                let currentLikes = parseInt(countSpan.textContent);
-                countSpan.textContent = currentLikes + 1;
+    // Toiminnot tykkäyksien laskuun.
+    function toggleLike(button) {
+        const id = button.getAttribute('data-id');
+        const countEl = document.getElementById(`likes-${id}`);
+        if (!countEl) return;
+
+        const liked = button.classList.toggle('liked');
+
+        button.classList.add('pop');
+        setTimeout(() => button.classList.remove('pop'), 300);
+
+        let count = parseInt(countEl.textContent) || 0;
+        count = liked ? count + 1 : Math.max(0, count - 1);
+        countEl.textContent = count;
+
+        button.setAttribute('aria-pressed', liked ? 'true' : 'false');
+        button.title = liked ? 'Poista tykkäys' : 'Tykkää';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.heart-button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleLike(btn);
+            });
+            
+            btn.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    toggleLike(btn);
+                }
             });
         });
-    </script>
+    });
+</script>
 </body>
 </html>
