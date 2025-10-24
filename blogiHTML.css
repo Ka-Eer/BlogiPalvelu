@@ -1,0 +1,35 @@
+body {
+    min-width: 400px;
+}
+form {
+    padding: 2em;
+}
+.Header_Top {
+    background-image: url(Kuvat/Placeholder.png);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+    position: relative;
+}
+.Header_Top::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+.Header_Top h1 {
+    font-size: 8rem;
+    z-index: 2;
+    position: relative;
+    font-weight: bold;
+}
+#blogit {
+    padding: 2em;
+    flex-wrap: wrap;
+}

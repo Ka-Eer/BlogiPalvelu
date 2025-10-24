@@ -2,51 +2,162 @@
 <html lang="fi">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="blogiHTML.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blogipalvelu</title>
-    <style>
-        body {
-            padding: 3em;
-        }
-        form {
-            max-width: 40%;
-        }
-    </style>
 </head>
 <body>
+    <header class="Header_Top">
+        <h1 class="text-center">Blogi</h1>
+    </header>
+    
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Etusivu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blogi.html">Blogi</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!--Täytettävät kohdat-->
     <form class="mx-auto" method="post" id="BlogForm">
-        <h1>Blogipalvelu</h1>
+
         <br>
-        <input class="form-control" type="text" id="blogTextTitle" placeholder="Blogin Otsikko">
+        <input class="form-control bg-light" type="text" id="blogTextTitle" placeholder="Blogin Otsikko" required>
         <br>
-        <textarea class="form-control" id="blogText" placeholder="Kirjoita blogiteksti tähän"></textarea>
+        <textarea class="form-control bg-light" id="blogText" placeholder="Kirjoita blogiteksti tähän" required></textarea>
+        <br>
+        <input class="form-control" type="file" accept="image/*" id="blogImg">
         <br>
         <button class="btn btn-primary" type="submit" onclick="CreateBlog()">Postaa</button>
     </form>
-    <div class="mx-auto" id="blogit">
-        
-    </div>
-    <script>
+
+    <!--Alue, johon blogit lisääntyvät-->
+    <div class="container-fluid d-flex" id="blogit"></div>
+
+    <!--Blogin lisäys sivulle-->
+    <script> 
         function CreateBlog() {
-            event.preventDefault()
-            const Blog_Full = document.createElement("div");
+
+            // Haetaan tiedot käyttäjän syöttämästä otsikosta, tekstistä ja kuvasta
             const New_Title = document.getElementById("blogTextTitle").value;
             const New_BlogText = document.getElementById("blogText").value;
+            const New_BlogImg = document.getElementById("blogImg").files[0];
 
-            const TitleElement = document.createElement("h2");
-            TitleElement.textContent = New_Title
+            // Varmistetaan, että otsikko ja teksti ovat olemassa
+            if (New_Title && New_BlogText) {
 
-            const TextElement = document.createElement("p");
-            TextElement.textContent = New_BlogText
+                // Estää sivua latautumasta uudelleen nappia painaessa
+                event.preventDefault()
 
-            Blog_Full.appendChild(TitleElement)
-            Blog_Full.appendChild(TextElement)
+                // Luodaan kortti blogille
+                const Blog_Full = document.createElement("div");
 
-            const Add_Blog = document.getElementById("blogit");
-            Add_Blog.appendChild(Blog_Full);
-            }
+                // Lisätään luokat ja tyylimuutokset luotavaan korttiin
+                Blog_Full.classList.add("card");
+                Blog_Full.style.marginTop = "1em";
+                Blog_Full.style.width = "15em";
+                Blog_Full.style.minWidth = "15em";
+                Blog_Full.style.marginRight = "1em";
+                Blog_Full.style.height = "20em";
+
+                // Luodaan "Lue lisää" nappi
+                const Blog_Button = document.createElement("button");
+
+                // Luokat ja tyylimuutokset
+                Blog_Button.classList.add("btn");
+                Blog_Button.classList.add("btn-info");
+                Blog_Button.textContent = "Lue lisää";
+                // Varmistetaan, että nappi on kortin alareunassa
+                Blog_Button.style.marginBottom = "auto";                
+
+                // Luodaan blogikortin tekstialue
+                const Blog_TextArea = document.createElement("div");
+                // Lisätään luokka
+                Blog_TextArea.classList.add("card-body");
+
+                // Luodaan otsikko korttiin
+                const TitleElement = document.createElement("h2");
+                // Otetaan otsikko käyttäjän syöttämästä otsikosta
+                TitleElement.textContent = New_Title;
+                // Fonttikoko
+                TitleElement.style.fontSize = "2em"
+
+                // Luodaan blogiteksti
+                const TextElement = document.createElement("p");
+                // Lisätään käyttäjän syöttämä blogiteksti
+                TextElement.textContent = New_BlogText;
+                // Fonttikoko
+                TextElement.style.fontSize = "1em"
+
+                // Jos kuva on liitetty:
+                if (New_BlogImg) {
+                    // Filereader kuvan lukemista varten
+                    const reader = new FileReader();
+
+                    // Suoritetaan kun kuva on ladattu
+                    reader.onload = function(event) {
+
+                        // Luodaan kuva
+                        const ImgElement = document.createElement("img");
+                        // Otetaan kuvaksi käyttäjän syöttämä kuva
+                        ImgElement.src = event.target.result;
+
+                        // Kuva 40% kortin koosta
+                        ImgElement.style.height = "40%";
+                        // Kuva kroppaanttuu, eikä litisty
+                        ImgElement.style.objectFit = "cover";
+
+                        // Kuvan kulmat
+                        ImgElement.style.borderTopLeftRadius = "0.25em"
+                        ImgElement.style.borderTopRightRadius = "0.25em"
+
+                        // Lisätään otsikko ja blogiteksti kortin tekstialueeseen
+                        Blog_TextArea.appendChild(TitleElement);
+                        Blog_TextArea.appendChild(TextElement);
+
+                        // Lisätään kuva kortin yläosaan
+                        Blog_Full.appendChild(ImgElement);
+                        // Otsikko ja blogiteksti kuvan jälkeen
+                        Blog_Full.appendChild(Blog_TextArea);
+                        // Nappi kortin alareunaan
+                        Blog_Full.appendChild(Blog_Button)
+                    }
+
+                    // Lukee kuvan DataURL-muodossa, jotta se voidaan näyttää selaimessa
+                    reader.readAsDataURL(New_BlogImg);
+
+                } else { // Jos kuvaa ei ole liitetty
+                        // Lisätään otsikko ja blogiteksti tekstialueeseen 
+                        Blog_TextArea.appendChild(TitleElement);
+                        Blog_TextArea.appendChild(TextElement);
+
+                        // Lisätään tekstialue ja nappi korttiin
+                        Blog_Full.appendChild(Blog_TextArea);
+                        Blog_Full.appendChild(Blog_Button)
+                }
+
+                // Haetaan div, johon blogi lisätään
+                const Add_Blog_Here = document.getElementById("blogit");
+                // Lisätään blogi
+                Add_Blog_Here.appendChild(Blog_Full);
+
+                // Tyhjentää täytettävät kohdat blogin lisäämisen jälkeen.
+                document.getElementById("blogTextTitle").value = "";
+                document.getElementById("blogText").value = "";
+                document.getElementById("blogImg").value = "";
+                }
+
+            }        
     </script>
     
 </body>
