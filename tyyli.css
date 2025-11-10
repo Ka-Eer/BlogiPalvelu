@@ -117,3 +117,22 @@
     outline-offset: 3px;
     border-radius: 6px;
 }
+@media (max-width: 995px) {
+    .content-section .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .content-section .col-12.col-lg-8 {
+        order: 2;
+    }
+    .content-section .col-12.col-lg-4 {
+        order: 1;
+    }
+    .suositut {
+    order: -1;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    }
+}
