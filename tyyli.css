@@ -61,6 +61,13 @@
     background-color: #e0e0e0;
     transform: translateX(3px);
 }
+/*Hakukenttä*/
+.no-results {
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+    color: gray;
+}
 /*Tykkäys nappi*/
 .like-btn {
     display: inline-flex;
@@ -117,6 +124,7 @@
     outline-offset: 3px;
     border-radius: 6px;
 }
+/*Ikkunan pienentyessä pienemmäksi kuin 995px muuttuu etusivun elementtien paikka*/
 @media (max-width: 995px) {
     .content-section .row {
         display: flex;
