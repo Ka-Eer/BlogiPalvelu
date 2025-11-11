@@ -29,18 +29,18 @@
     </nav>
 
     <!--Täytettävät kohdat-->
-    <form class="mx-auto" method="post" id="BlogForm">
+    <form action="send.php" class="mx-auto" method="post" id="BlogForm">
 
         <br>
-        <input class="form-control bg-light" type="text" id="blogTextTitle" placeholder="Blogin Otsikko" required maxlength="75">
+        <input class="form-control bg-light" type="text" name="blogTextTitle"  id="blogTextTitle" placeholder="Blogin Otsikko" required maxlength="75">
         <br>
-        <textarea class="form-control bg-light" id="blogText" placeholder="Kirjoita blogiteksti tähän" required></textarea>
+        <textarea class="form-control bg-light" name="blogText" id="blogText" placeholder="Kirjoita blogiteksti tähän" required></textarea>
         <br>
         <label class="form-label" for="blogImg">Lisää Kuva (Valinnainen)</label>
         <br>
-        <input class="form-control" type="file" accept="image/*" id="blogImg">
+        <input class="form-control" type="file" accept="image/*" name="blogImg" id="blogImg">
         <br>
-        <button class="btn btn-primary" type="submit" onclick="CreateBlog()">Postaa</button>
+        <button class="btn btn-primary" type="submit">Postaa</button>
     </form>
 
     <!--Alue, johon blogit lisääntyvät-->
