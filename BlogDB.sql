@@ -1,4 +1,4 @@
-create database blogitekstit character set utf8 collate utf8_swedish_ci;
+create database blogitekstit character set utf8 collate utf8mb4_general_ci;
 use blogitekstit;
 
 CREATE TABLE `blogit` (
