@@ -38,85 +38,12 @@
     <div class="container-fluid content-section">
         <div class="row g-4">
             <div class="col-12 col-lg-8">
-                <div class="row">
-                    <!--Testi kortti 1-->
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="card">
-                            <img src="Kuvat/Placeholder2.png" alt="Kuva">
-                            <div class="card-body">
-                                <h5 class="card-title">Testi Blogi 1.</h5>
-                                <p class="card-text">Tämä on testi</p>
-                                <a href="#" class="btn btn-primary">Lue lisää</a>
-                                <span class="like-btn"> <!--Tykkäys nappi-->
-                                    <button class="heart-button" aria-pressed="false" title="Like" data-id="1" aria-label="Tykkää"> <!--Tärkeää! data-id="" erottelee blogit toisistaan-->
-                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                            <!--Sydän kuvio-->
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                        </svg>
-                                    </button> 
-                                    <span class="like-count" id="likes-1">0</span> <!--Tärkeää! id="likes-1" on data-id tavoin persoonallinen tälle blogi kortille-->
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Testi kortti 2-->
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="card">
-                            <img src="Kuvat/Placeholder2.png" alt="Kuva">
-                            <div class="card-body">
-                                <h5 class="card-title">Testi Blogi 2.</h5>
-                                <p class="card-text">Tämä on testi</p>
-                                <a href="#" class="btn btn-primary">Lue lisää</a>
-                                <span class="like-btn">
-                                    <button class="heart-button" aria-pressed="false" title="Like" data-id="2" aria-label="Tykkää">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                        </svg>
-                                    </button> 
-                                    <span class="like-count" id="likes-2">0</span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Testi kortti 3-->
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="card">
-                            <img src="Kuvat/Placeholder2.png" alt="Kuva">
-                            <div class="card-body">
-                                <h5 class="card-title">Testi Blogi 3.</h5>
-                                <p class="card-text">Tämä on testi</p>
-                                <a href="#" class="btn btn-primary">Lue lisää</a>
-                                <span class="like-btn">
-                                    <button class="heart-button" aria-pressed="false" title="Like" data-id="3" aria-label="Tykkää">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                        </svg>
-                                    </button> 
-                                    <span class="like-count" id="likes-3">0</span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Testi kortti 4-->
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="card">
-                            <img src="Kuvat/Placeholder2.png" alt="Kuva">
-                            <div class="card-body">
-                                <h5 class="card-title">Testi Blogi 4.</h5>
-                                <p class="card-text">Tämä on testi</p>
-                                <a href="#" class="btn btn-primary">Lue lisää</a>
-                                <span class="like-btn">
-                                    <button class="heart-button" aria-pressed="false" title="Like" data-id="4" aria-label="Tykkää">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                        </svg>
-                                    </button> 
-                                    <span class="like-count" id="likes-4">0</span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                <h4>Uusimmat blogit</h4>
+                 <!-- JavaScript täyttää tämän osion 8 uusimmalla kortilla -->
+                <div id="latest-row" class="row">
+                    <!-- cards inserted here by js/latestPosts.js -->
                 </div>
+                <div id="noResults" class="no-results" style="display:none">Ei löytynyt blogeja.</div>
             </div>
             <!--Suosituimmat blogit lista-->
             <div class="col-12 col-lg-4">
@@ -182,6 +109,7 @@
         });
     });
 </script>
+    <script src="js/latestPosts.js" defer></script>
     <script src="js/topLikes.js" defer></script>
 </body>
 </html>
