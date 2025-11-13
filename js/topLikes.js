@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 listEl.insertAdjacentElement('afterend', loadMoreBtn);
             }
         })
+        // jos ei saada yhteyttä palvelimeen
         .catch(err => {
             console.error('Failed to load top likes:', err);
             listEl.innerHTML = `<li>Ei saatu yhteyttä palvelimeen.</li>`;

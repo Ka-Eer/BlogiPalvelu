@@ -97,8 +97,9 @@
                 gallery.appendChild(col);
             });
         } catch (err) {
+            // jos ei saada yhteyttä palvelimeen
             console.error(err);
-            document.getElementById('noResults').textContent = 'Lataus epäonnistui';
+            document.getElementById('noResults').textContent = 'Ei saatu yhteyttä palvelimeen.';
             document.getElementById('noResults').style.display = 'block';
         }
     }
