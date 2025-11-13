@@ -33,6 +33,26 @@
 .card {
     margin-bottom: 20px;
 }
+
+/* Hover / clickable card styles for index/gallery cards */
+.card.blog-card.clickable,
+.card.gallery-card.clickable {
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.card.blog-card.clickable:hover,
+.card.gallery-card.clickable:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+.card.blog-card.clickable:focus,
+.card.gallery-card.clickable:focus {
+    outline: 3px solid rgba(13,110,253,0.15);
+    outline-offset: 4px;
+}
+.card.blog-card.clickable { cursor: pointer; }
+
+
+
 .suositut {
     background-color: #f8f9fa;
     padding: 20px;
@@ -91,6 +111,20 @@
 .suositut ul li.top-item .top-heart .like-num {
     font-weight: 600;
     color: #212529;
+}
+/* Hover/clickable styles for top-list items (suosituimmat) */
+.suositut ul li.top-item.clickable {
+    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    cursor: pointer;
+}
+.suositut ul li.top-item.clickable:hover {
+    transform: translateX(4px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    background-color: #f8f9fa;
+}
+.suositut ul li.top-item.clickable:focus {
+    outline: 3px solid rgba(13,110,253,0.12);
+    outline-offset: 3px;
 }
 /*Hakukenttä*/
 .no-results {

@@ -20,10 +20,12 @@ async function loadLatestPosts() {
 
         posts.forEach(post => {
             const col = document.createElement('div');
-            col.className = 'col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3';
+            col.className = 'col-12 col-sm-6 col-lg-4 col-xl-3';
 
             const card = document.createElement('div');
-            card.className = 'card blog-card';
+            card.className = 'card blog-card clickable';
+            // make card keyboard-focusable
+            card.tabIndex = 0;
 
             const img = document.createElement('img');
             img.src = post.Kuvasrc || 'Kuvat/Placeholder2.png';
@@ -98,6 +100,24 @@ async function loadLatestPosts() {
             card.appendChild(body);
             col.appendChild(card);
             container.appendChild(col);
+
+            // koko kortti klikattavaksi (navigoi samaan href:iin kuin 'Lue lisää')
+            const cardNavigate = (event) => {
+                // ignooraa klikkaukset, jotka tulevat sydännapista tai sen lapsielementeistä tai lue lisää -linkistä
+                if (event.target.closest('.heart-button') || event.target.closest('a')) return;
+                window.location.href = read.href;
+            };
+            card.addEventListener('click', cardNavigate);
+            // näppäimmistö: Enter tai Space kun kortti on focussattuna
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    // jos fokus on interaktiivisessa lapsielementissä, ohita
+                    const active = document.activeElement;
+                    if (active && (active.classList && (active.classList.contains('heart-button') || active.tagName === 'A'))) return;
+                    e.preventDefault();
+                    window.location.href = read.href;
+                }
+            });
         });
 
         // lisää tykkäysnapin kuuntelijat

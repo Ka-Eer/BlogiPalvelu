@@ -35,7 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const likes = typeof item.Tykkaykset === 'number' ? item.Tykkaykset : (parseInt(item.Tykkaykset) || 0);
 
                 const li = document.createElement('li');
-                li.className = 'top-item mb-2';
+                li.className = 'top-item mb-2 clickable';
+                // lista itemi näppäin fokusoitavaksi
+                li.tabIndex = 0;
 
                 const a = document.createElement('a');
                 a.href = `blogi.html?id=${encodeURIComponent(id)}`;
@@ -53,6 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 li.appendChild(a);
                 li.appendChild(heart);
                 listEl.appendChild(li);
+
+                // tekee koko listaelementistä klikattavan (navigoi samaan href:iin kuin anchor)
+                li.addEventListener('click', (event) => {
+                    // ignooraa klikkaukset sydämestä tai sisemmistä ankkureista
+                    if (event.target.closest('.top-heart') || event.target.closest('a')) return;
+                    window.location.href = a.href;
+                });
+                li.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        const active = document.activeElement;
+                        if (active && (active.classList && active.classList.contains('top-heart'))) return;
+                        e.preventDefault();
+                        window.location.href = a.href;
+                    }
+                });
             }
 
             // Lataa seuraavat pageSize elementtiä
