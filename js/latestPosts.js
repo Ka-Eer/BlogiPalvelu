@@ -20,7 +20,7 @@ async function loadLatestPosts() {
 
         posts.forEach(post => {
             const col = document.createElement('div');
-            col.className = 'col-12 col-sm-6 col-lg-3';
+            col.className = 'col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3';
 
             const card = document.createElement('div');
             card.className = 'card blog-card';
@@ -52,6 +52,17 @@ async function loadLatestPosts() {
             read.textContent = 'Lue lisää';
             body.appendChild(read);
 
+            // päivämäärä ja aika
+            const meta = document.createElement('div');
+            meta.className = 'd-flex justify-content-between align-items-center mt-2';
+            const date = document.createElement('small');
+            date.className = 'text-muted';
+            // näytä vain hh:mm (ilman sekunteja)
+            const timeOnly = post.Klo ? post.Klo.slice(0, 5) : '';
+            date.textContent = post.Pvm + ' ' + timeOnly;
+            meta.appendChild(date);
+            body.appendChild(meta);
+
             const likeWrap = document.createElement('span');
             likeWrap.className = 'like-btn';
 
@@ -72,7 +83,17 @@ async function loadLatestPosts() {
 
             likeWrap.appendChild(btn);
             likeWrap.appendChild(likeCount);
-            body.appendChild(likeWrap);
+            
+            // lisää tykkäykset meta-taulukkoon (päivämäärän kanssa)
+            const likesSmall = document.createElement('small');
+            likesSmall.className = 'text-muted';
+            likesSmall.appendChild(likeWrap);
+            
+            // Etsi meta ja lisää like-span sinne
+            const metaLikes = document.createElement('span');
+            metaLikes.appendChild(btn);
+            metaLikes.appendChild(likeCount);
+            meta.appendChild(metaLikes);
 
             card.appendChild(body);
             col.appendChild(card);
