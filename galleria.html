@@ -41,70 +41,26 @@
     </main>
 
     <script>
-    // Hakee rivit PHP päätepisteestä ja renderöi kortteina
-    async function loadGallery() {
-        try {
-            const res = await fetch('get_galleria.php');
-            if (!res.ok) throw new Error('Network response was not ok');
-            const rows = await res.json();
-            const gallery = document.getElementById('gallery');
-            gallery.innerHTML = '';
-            if (!rows || rows.length === 0) {
-                document.getElementById('noResults').style.display = 'block';
-                return;
-            }
-            document.getElementById('noResults').style.display = 'none';
-            rows.forEach(r => {
-                const col = document.createElement('div');
-                col.className = 'card gallery-item gallery-card';
+    // Toiminnot tykkäyksien laskuun
+    function toggleLike(button) {
+        const id = button.getAttribute('data-id');
+        const countEl = document.getElementById(`likes-${id}`);
+        if (!countEl) return;
 
-                // Kuva: jos Kuva puuttuu, näytä placeholder
-                const img = document.createElement('img');
-                img.className = 'card-img-top';
-                img.alt = r.Otsikko || 'Blogi-kuva';
-                img.src = r.Kuva ? ('data:image/*;base64,' + r.Kuva) : 'Kuvat/Placeholder2.png';
+        const liked = button.classList.toggle('liked');
 
-                const body = document.createElement('div');
-                body.className = 'card-body';
+        button.classList.add('pop');
+        setTimeout(() => button.classList.remove('pop'), 300);
 
-                const title = document.createElement('h5');
-                title.className = 'card-title';
-                title.textContent = r.Otsikko;
+        let count = parseInt(countEl.textContent) || 0;
+        count = liked ? count + 1 : Math.max(0, count - 1);
+        countEl.textContent = count;
 
-                const p = document.createElement('p');
-                p.className = 'card-text';
-                p.textContent = r.Teksti.length > 120 ? r.Teksti.slice(0,120) + '...' : r.Teksti;
-
-                const meta = document.createElement('div');
-                meta.className = 'd-flex justify-content-between align-items-center';
-                const date = document.createElement('small');
-                date.className = 'text-muted';
-                date.textContent = r.Pvm;
-                const likes = document.createElement('small');
-                likes.className = 'text-muted';
-                likes.textContent = '♥ ' + (r.Tykkaykset || 0);
-
-                meta.appendChild(date);
-                meta.appendChild(likes);
-
-                body.appendChild(title);
-                body.appendChild(p);
-                body.appendChild(meta);
-
-                col.appendChild(img);
-                col.appendChild(body);
-
-                gallery.appendChild(col);
-            });
-        } catch (err) {
-            // jos ei saada yhteyttä palvelimeen
-            console.error(err);
-            document.getElementById('noResults').textContent = 'Ei saatu yhteyttä palvelimeen.';
-            document.getElementById('noResults').style.display = 'block';
-        }
+        button.setAttribute('aria-pressed', liked ? 'true' : 'false');
+        button.title = liked ? 'Poista tykkäys' : 'Tykkää';
     }
-
-    document.addEventListener('DOMContentLoaded', loadGallery);
     </script>
+
+    <script src="js/galleryCards.js" defer></script>
 </body>
 </html>
