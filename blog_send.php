@@ -12,6 +12,7 @@ if (!mysqli_select_db($dbh, 'blogitekstit')) {
 $otsikko = $_POST['blogTextTitle'];
 $teksti = $_POST['blogText'];
 $pvm = date('Y-m-d');
+$klo = date('H:i:s');
 $kuva = NULL;
 /* Jos kuva ei tyhjä, ottaa tiedoston nimen */
 if (!empty($_FILES['blogImg']['name'])) {
@@ -21,7 +22,7 @@ if (!empty($_FILES['blogImg']['name'])) {
     $kuva = time() . "_" . $originalName;
 }
 
-$sql = "INSERT INTO blogit (Pvm, Otsikko, Teksti, Kuva) VALUES ('$pvm', '$otsikko', '$teksti', '$kuva')";
+$sql = "INSERT INTO blogit (Pvm, Klo, Otsikko, Teksti, Kuva) VALUES ('$pvm', '$klo', '$otsikko', '$teksti', '$kuva')";
 if (mysqli_query($dbh, $sql)) {
     echo "Toimii";
 } else {
