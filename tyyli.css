@@ -61,6 +61,37 @@
     background-color: #e0e0e0;
     transform: translateX(3px);
 }
+/* Top-list item border and heart styling */
+.suositut ul li.top-item {
+    border: 1px solid #dee2e6;
+    padding: 8px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+}
+.suositut ul li.top-item a {
+    display: inline-block;
+    color: #212529;
+    text-decoration: none;
+    font-weight: 500;
+}
+.suositut ul li.top-item .top-heart {
+    color: #dc3545; /* käytetään SVG:n currentColor */
+    display: inline-flex;
+    align-items: center;
+}
+.suositut ul li.top-item .top-heart svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    stroke: currentColor;
+}
+.suositut ul li.top-item .top-heart .like-num {
+    font-weight: 600;
+    color: #212529;
+}
 /*Hakukenttä*/
 .no-results {
     text-align: center;
