@@ -6,6 +6,7 @@ use blogitekstit;
 CREATE TABLE `blogit` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `Pvm` date NOT NULL,
+  `Klo` time NOT NULL,
   `Otsikko` varchar(100) NOT NULL,
   `Teksti` text NOT NULL,
   `Kuva` mediumblob DEFAULT NULL,
