@@ -26,7 +26,7 @@
     font-weight: bold;
 }
 /*Blogi kortit*/
-.content-section .col-lg-8 {
+.content-section {
     padding: 20px;
     border-right: 1px solid #ddd;
 }
@@ -155,8 +155,8 @@
     outline-offset: 3px;
     border-radius: 6px;
 }
-/*Ikkunan pienentyessä pienemmäksi kuin 995px muuttuu etusivun elementtien paikka*/
-@media (max-width: 995px) {
+/* Ikkunan pienentyessä alle Bootstrapin lg-breakpoint (992px) — siirtymä col-lg -> col-md - muuttuu erusivun elementtien järjestys*/
+@media (max-width: 991.98px) {
     .content-section .row {
         display: flex;
         flex-wrap: wrap;
