@@ -20,7 +20,7 @@ try {
     ]);
 
     // Hakee galleriaan tiedot tietokannan taulusta blogit
-    $stmt = $pdo->query('SELECT ID, Pvm, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY Pvm DESC, ID DESC');
+    $stmt = $pdo->query('SELECT ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY ID ASC');
     $rows = [];
     while ($r = $stmt->fetch()) {
         // jos Kuva on binääri, tallenna se base64-muodossa data URL:ien käyttöä varten asiakaspuolella
