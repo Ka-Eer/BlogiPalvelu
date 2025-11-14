@@ -38,10 +38,12 @@
         <br>
         <textarea class="form-control bg-light" name="blogText" id="blogText" placeholder="Kirjoita blogiteksti tähän" required></textarea>
         <br>
-        <label class="form-label" for="blogImg">Lisää Kuva (Valinnainen)</label>
-        <br>
-        <input class="form-control" type="file" accept="image/*" name="blogImg" id="blogImg">
-        <br>
+    <label class="form-label" for="blogImg">Lisää Kuva (Valinnainen)</label>
+    <br>
+    <input class="form-control" type="file" accept="image/*" name="blogImg" id="blogImg">
+    <div class="form-text">Maksimikoko: 15 MB.</div>
+    <div id="fileError" class="text-danger small" style="display:none; margin-top:6px;"></div>
+    <br>
         <!--Kortin lisäys-->
         <button class="btn btn-primary" type="submit">Postaa</button>
         <!-- Lisää yllä olevaan nappiin 'onclick="CreateBlog()"', jos haluat blogin tulevan suoraan sivulle  -->
