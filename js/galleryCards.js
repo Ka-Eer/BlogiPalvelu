@@ -1,57 +1,63 @@
+// galleryCards.js
 // hakee kaikki blogipostaukset get_galleria.php:stä ja renderöi ne korteiksi
 
-async function loadGalleryCards() {
+async function loadGalleryCards() { // lataa gallerian blogipostaukset
     const container = document.getElementById('gallery');
     const noResults = document.getElementById('noResults');
-    if (!container) return;
+    if (!container) return; // jos ei löydy, lopeta
 
+    // hae blogipostaukset palvelimelta
     try {
-        const res = await fetch('get_galleria.php');
+        const res = await fetch('get_galleria.php');//kutsuu get_galleria.php
         if (!res.ok) throw new Error('Network response not ok');
         const posts = await res.json();
 
+        // tyhjennä vanhat tulokset
         container.innerHTML = '';
         if (!posts || posts.length === 0) {
             if (noResults) noResults.style.display = '';
             return;
         }
 
+        // piilota "ei tuloksia" -viesti
         if (noResults) noResults.style.display = 'none';
 
-        posts.forEach(post => {
-            const col = document.createElement('div');
-            // Use the same column classes as the index's latestPosts.js so
-            // gallery columns behave identically: 1 / 2 / 3 / 4 per row at
-            // xs, sm, lg, xl breakpoints respectively.
-            col.className = 'col-12 col-sm-6 col-lg-4 col-xl-3';
 
+        // Korttien renderöinti
+        posts.forEach(post => { // käydään jokainen postaus läpi
+            const col = document.createElement('div');
+            col.className = 'col-12 col-sm-6 col-lg-4 col-xl-3';//BS sarake luokat
+
+            //luo kortti
             const card = document.createElement('div');
             card.className = 'card gallery-card clickable';
-            // make card keyboard-focusable
             card.tabIndex = 0;
 
+            // Luo kuva elementti
             const img = document.createElement('img');
             img.src = post.Kuvasrc || 'Kuvat/Placeholder2.png';
             img.alt = 'Kuva';
-            // Keep image natural sizing (like index) so card sizes match
-            // latestPosts.js behaviour (no forced fixed thumbnail height).
             card.appendChild(img);
 
+            //luo kortin runko
             const body = document.createElement('div');
             body.className = 'card-body';
 
+            //otsikko
             const title = document.createElement('h5');
             title.className = 'card-title';
             title.textContent = post.Otsikko || '';
             body.appendChild(title);
 
+            //esikatselu teksti
             const text = document.createElement('p');
             text.className = 'card-text';
-            // lyhyt esikatselu (ensimmäiset 140 merkkiä)
+            //esikatselu (max 140 merkkiä)
             const preview = (post.Teksti || '').replace(/\s+/g, ' ').trim();
             text.textContent = preview.length > 140 ? preview.slice(0,140) + '…' : preview;
             body.appendChild(text);
 
+            // Lue lisää linkki
             const read = document.createElement('a');
             read.className = 'btn btn-primary';
             // linkki tarkemmalle blogisivulle (blogi.html?id=ID)
@@ -70,9 +76,10 @@ async function loadGalleryCards() {
             meta.appendChild(date);
             body.appendChild(meta);
 
+            //tykkäykset
             const likeWrap = document.createElement('span');
             likeWrap.className = 'like-btn';
-
+            // Luo tykkäysnappi
             const btn = document.createElement('button');
             btn.className = 'heart-button';
             btn.setAttribute('aria-pressed', 'false');
@@ -83,6 +90,7 @@ async function loadGalleryCards() {
             // lisää sydänkuvake
             btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
 
+            // tykkäyslaskuri
             const likeCount = document.createElement('span');
             likeCount.className = 'like-count';
             likeCount.id = 'likes-' + post.ID;
@@ -134,6 +142,7 @@ async function loadGalleryCards() {
     }
 }
 
+// tykkäysnapin event listenerit
 function attachLikeListeners() {
     document.querySelectorAll('.heart-button').forEach(btn => {
         // välttää moninkertaiset event listenerit

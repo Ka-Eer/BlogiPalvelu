@@ -1,6 +1,9 @@
-<?php
+<?php // get_latest.php
+// hakee uusimmat 8 blogipostausta tietokannasta ja palauttaa JSON muodossa
+
 header('Content-Type: application/json; charset=utf-8');
 
+// Yhdistää MySQL tietokantaan
 $dbh = mysqli_connect('localhost', 'root', '', 'blogitekstit');
 if (!$dbh) {
     http_response_code(500);
@@ -8,7 +11,8 @@ if (!$dbh) {
     exit;
 }
 
-$sql = "SELECT ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY Pvm DESC, Klo DESC LIMIT 8";
+//  Hakee uusimmat 8 blogipostausta
+$sql = "SELECT ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY Pvm DESC, Klo DESC LIMIT 8"; // Muuta tarvittaessa rajausta tai järjestystä (ORDER BY, LIMIT)
 $res = mysqli_query($dbh, $sql);
 if (!$res) {
     http_response_code(500);
@@ -18,7 +22,7 @@ if (!$res) {
 
 $rows = [];
 while ($row = mysqli_fetch_assoc($res)) {
-    // Ensure UTF-8 safe output and normalize null image
+    // Varmistaa UTF-8 turvallisen uotput ja normalisoi null kuvan
     $row['Otsikko'] = isset($row['Otsikko']) ? $row['Otsikko'] : '';
     $row['Teksti'] = isset($row['Teksti']) ? $row['Teksti'] : '';
     if (!empty($row['Kuva'])) {
@@ -48,8 +52,10 @@ while ($row = mysqli_fetch_assoc($res)) {
             $row['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
         }
     } else {
+        //määritä placeholder jos ei ole kuvaa
         $row['Kuvasrc'] = 'Kuvat/Placeholder2.png';
     }
+    // Varmistaa että Tykkäykset on kokonaisluku
     $row['Tykkaykset'] = isset($row['Tykkaykset']) ? (int)$row['Tykkaykset'] : 0;
     $rows[] = $row;
 }
