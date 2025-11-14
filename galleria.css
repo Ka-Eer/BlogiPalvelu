@@ -1,0 +1,140 @@
+/* galleria.css - Gallery page specific styles, derived from tyyli.css */
+
+/* Header/Otsikko styles */
+.Otsikko1 {
+    background-image: url(Kuvat/Placeholder.png);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+    position: relative;
+}
+.Otsikko1::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+.Otsikko1 h1 {
+    position: relative;
+    z-index: 2;
+    font-size: 8rem;
+    font-weight: bold;
+}
+
+/* Content section layout */
+.content-section {
+    padding: 20px;
+}
+
+/* Card base styles */
+.card {
+    margin-bottom: 20px;
+}
+
+/* Gallery card column layout: responsive sizes */
+/* Use Bootstrap grid classes for column sizing. Remove manual width overrides
+   so the grid can behave responsively (we add only image-sizing below). */
+
+/* Make gallery images behave like the index: full width, natural height.
+   Avoid forcing a fixed thumbnail height so cards keep the same size as
+   the index page cards. */
+.card.gallery-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Gallery card hover and clickable styles */
+.card.gallery-card.clickable {
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.card.gallery-card.clickable:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+.card.gallery-card.clickable:focus {
+    outline: 3px solid rgba(13,110,253,0.15);
+    outline-offset: 4px;
+}
+.card.gallery-card.clickable {
+    cursor: pointer;
+}
+
+/* No results message */
+.no-results {
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+    color: gray;
+}
+
+/* Like button and counter styles */
+.like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+    user-select: none;
+}
+.heart-button {
+    width: 36px;
+    height: 36px;
+    padding: 4px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 150ms ease;
+}
+.heart-button:active {
+    transform: scale(0.95);
+}
+.heart-button svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 200ms ease, fill 200ms ease, stroke 200ms ease;
+    transform-origin: center;
+    stroke: #6c757d;
+    fill: transparent;
+    stroke-width: 1.5;
+}
+.heart-button.liked svg {
+    fill: #dc3545;
+    stroke: #dc3545;
+    transform: scale(1.05);
+}
+.heart-button.pop {
+    animation: pop .28s cubic-bezier(.2,.9,.2,1);
+}
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+.like-count {
+    font-weight: 600;
+    min-width: 22px;
+    text-align: left;
+    color: #212529;
+}
+.heart-button:focus {
+    outline: 2px solid rgba(13, 110, 253, 0.25);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+/* Responsive breakpoint: adjust layout for smaller screens */
+@media (max-width: 991.98px) {
+    .content-section .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
