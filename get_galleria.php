@@ -23,12 +23,31 @@ try {
     $stmt = $pdo->query('SELECT ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY ID ASC');
     $rows = [];
     while ($r = $stmt->fetch()) {
-        // jos Kuva on binääri, tallenna se base64-muodossa data URL:ien käyttöä varten asiakaspuolella
+        // Kuva voi olla joko tiedostonimi tai binääridata (BLOB). Palautetaan asiakaspuolelle kenttä Kuvasrc:
         if (!empty($r['Kuva'])) {
-            // MySQL blobit voivat palautua merkkijonona; varmista base64 koodaus
-            $r['Kuva'] = base64_encode($r['Kuva']);
+            $k = $r['Kuva'];
+            if (is_string($k)) {
+                // Jos Kuva-kenttä on jo polku tai sisältää hakemiston erotin, käytä sellaisenaan
+                if (strpos($k, 'Kuvat/') === 0 || strpos($k, '/') !== false) {
+                    // Jos polku ei ala '/', tee siitä juurirelatiivinen
+                    if (strpos($k, '/') === 0) {
+                        $r['Kuvasrc'] = $k;
+                    } else {
+                        $r['Kuvasrc'] = '/' . $k;
+                    }
+                } elseif (preg_match('/^[0-9A-Za-z_\-\.]+\.[A-Za-z]{2,6}$/', $k) && strlen($k) < 512) {
+                    // pelkkä tiedostonimi -> juurirelatiivinen polku
+                    $r['Kuvasrc'] = '/Kuvat/' . $k;
+                } else {
+                    // muu merkkijono, oletetaan binääri
+                    $r['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
+                }
+            } else {
+                // ei-merkkijono, todennäköisesti BLOB
+                $r['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
+            }
         } else {
-            $r['Kuva'] = null;
+            $r['Kuvasrc'] = null;
         }
         $rows[] = $r;
     }
