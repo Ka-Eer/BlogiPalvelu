@@ -112,6 +112,7 @@
     font-weight: 600;
     color: #212529;
 }
+
 /* Hover/clickable styles for top-list items (suosituimmat) */
 .suositut ul li.top-item.clickable {
     transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
@@ -126,6 +127,7 @@
     outline: 3px solid rgba(13,110,253,0.12);
     outline-offset: 3px;
 }
+
 /*Hakukenttä*/
 .no-results {
     text-align: center;
