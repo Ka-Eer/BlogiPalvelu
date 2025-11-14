@@ -7,6 +7,24 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         msg.style.display = 'none';
         msg.textContent = '';
+        // clear previous file error
+        const fileError = document.getElementById('fileError');
+        if (fileError) { fileError.style.display = 'none'; fileError.textContent = ''; }
+
+        // client-side file size check (match server 15 MB limit)
+        const fileInput = form.querySelector('#blogImg');
+        if (fileInput && fileInput.files && fileInput.files.length > 0) {
+            const f = fileInput.files[0];
+            const maxBytes = 15 * 1024 * 1024; // 15 MB
+            if (f.size > maxBytes) {
+                if (fileError) {
+                    fileError.textContent = 'Kuva on liian suuri. Maksimikoko on 15 MB.';
+                    fileError.style.display = '';
+                }
+                if (submitBtn) submitBtn.disabled = false;
+                return;
+            }
+        }
 
         const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
