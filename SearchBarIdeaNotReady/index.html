@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <h1>Nimet</h1>
+    <form method="get">
+        <input type="text">
+    </form>
+    <ul id="nimet"></ul>
+
+    <script>
+        const nimiLista = document.getElementById("nimet"); 
+        
+        fetch("fetch.php")
+        .then(response => response.json())
+        .then(data => {
+            const lista = document.getElementById('nimet'); // Otetaan lista html:sta
+            const input = document.querySelector('input'); // Otetaan input html:sta
+
+            input.addEventListener('input', () => { // Päivittää aina, kun input kohtaan kirjoitetaan
+            const caseSens = input.value.toLowerCase(); // Toimii, vaikka ei olisi iso alkukirjain
+            lista.innerHTML = "";
+
+            data.forEach(row => {
+                const li = document.createElement("li");
+                li.textContent = row.Otsikko
+                lista.appendChild(li)
+            });
+
+            });
+            lista.innerHTML = data.map(p => `<li>${p.Otsikko}</li>`).join('');
+            
+     });
+
+    </script>
+</body>
+</html>
