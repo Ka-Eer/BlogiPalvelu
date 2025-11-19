@@ -23,17 +23,15 @@
             const input = document.querySelector('input'); // Otetaan input html:sta
 
             input.addEventListener('input', () => { // Päivittää aina, kun input kohtaan kirjoitetaan
-            const caseSens = input.value.toLowerCase(); // Toimii, vaikka ei olisi iso alkukirjain
-            lista.innerHTML = "";
-
-            data.forEach(row => {
-                const li = document.createElement("li");
-                li.textContent = row.Otsikko
-                lista.appendChild(li)
-            });
+                const caseSens = input.value.toLowerCase(); // Toimii, vaikka ei olisi iso alkukirjain
+                lista.innerHTML = data
+                    .filter(p => p.Otsikko.toLowerCase().includes(caseSens)) // Filteröi nimet ja näyttää vain haetut
+                    .map(p => `<li>${p.Otsikko}</li>`) // Varmistaa, että haetut nimet näkyvät listana
+                    .join(''); // Varmistaa, että haettujen nimien välissä on tyhjä tila
 
             });
-            lista.innerHTML = data.map(p => `<li>${p.Otsikko}</li>`).join('');
+            lista.innerHTML = data.map(p => `<li>${p.Otsikko}</li>`).join(''); // Näyttää nimet ennen kirjoittamista
+            
             
      });
 
