@@ -38,12 +38,59 @@
         <br>
         <textarea class="form-control bg-light" name="blogText" id="blogText" placeholder="Kirjoita blogiteksti tähän" required></textarea>
         <br>
-    <label class="form-label" for="blogImg">Lisää Kuva (Valinnainen)</label>
-    <br>
-    <input class="form-control" type="file" accept="image/*" name="blogImg" id="blogImg">
-    <div class="form-text">Maksimikoko: 15 MB.</div>
-    <div id="fileError" class="text-danger small" style="display:none; margin-top:6px;"></div>
-    <br>
+        <label class="form-label" for="blogImg">Lisää Kuva (Valinnainen)</label>
+        <br>
+        <input class="form-control" type="file" accept="image/*" name="blogImg" id="blogImg">
+        <div class="form-text">Maksimikoko: 15 MB.</div>
+        <label class="form-label">Valitse tagit (Valinnainen)</label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag1">
+            <label class="form-check-label" for="blogTag1">Pelit</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag2">
+            <label class="form-check-label" for="blogTag2">Matkustaminen</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag3">
+            <label class="form-check-label" for="blogTag3">Teknologia & Internet</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag4">
+            <label class="form-check-label" for="blogTag4">Oppiminen & Itsekehitys</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag5">
+            <label class="form-check-label" for="blogTag5">Ruoka & Juoma</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag6">
+            <label class="form-check-label" for="blogTag6">Hyvinvointi & Elämäntyyli</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag7">
+            <label class="form-check-label" for="blogTag7">Luovuus & Kulttuuri</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag8">
+            <label class="form-check-label" for="blogTag8">Työ & Ura</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag9">
+            <label class="form-check-label" for="blogTag9">Koti & Arki</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag10">
+            <label class="form-check-label" for="blogTag10">Tee se itse & Projektit</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="blogTag11">
+            <label class="form-check-label" for="blogTag11">Ympäristö & Luonto</label>
+        </div>
+
+
+        <div id="fileError" class="text-danger small" style="display:none; margin-top:6px;"></div>
+        <br>
         <!--Kortin lisäys-->
         <button class="btn btn-primary" type="submit">Postaa</button>
         <!-- Lisää yllä olevaan nappiin 'onclick="CreateBlog()"', jos haluat blogin tulevan suoraan sivulle  -->
