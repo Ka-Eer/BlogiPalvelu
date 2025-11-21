@@ -25,6 +25,10 @@
                     <li class="nav-item"><a class="nav-link" href="blogi.html">Blogi</a></li>
                     <li class="nav-item"><a class="nav-link active" href="galleria.html">Galleria</a></li>
                 </ul>
+                <!--Hakukenttä-->
+                <form class="d-flex" role="search">
+                    <input id="searchInput" class="form-control me-2" type="search" placeholder="Hae..." aria-label="Search">
+                </form>
             </div>
         </div>
     </nav>
@@ -48,6 +52,23 @@
     </main>
 
     <script>
+
+    // Toiminto blogien hakuun
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const cards = document.querySelectorAll('.gallery-card');
+        let anyVisible = false;
+
+        cards.forEach(card => {
+            const title = card.querySelector('.card-title').textContent.toLowerCase();
+            const match = title.includes(query);
+            card.parentElement.style.display = match ? '' : 'none';
+            if (match) anyVisible = true;
+        });
+
+        document.getElementById('noResults').style.display = anyVisible ? 'none' : 'block';
+    });
+    
     // Toiminnot tykkäyksien laskuun
     function toggleLike(button) {
         const id = button.getAttribute('data-id');
