@@ -60,21 +60,31 @@
     </div>
 
     <script>
-    // Toiminto blogien hakuun
-    document.getElementById('searchInput').addEventListener('input', function() {
-        const query = this.value.toLowerCase();
-        const cards = document.querySelectorAll('.blog-card');
-        let anyVisible = false;
-
-        cards.forEach(card => {
-            const title = card.querySelector('.card-title').textContent.toLowerCase();
-            const match = title.includes(query);
-            card.parentElement.style.display = match ? '' : 'none';
-            if (match) anyVisible = true;
-        });
-
-        document.getElementById('noResults').style.display = anyVisible ? 'none' : 'block';
+    // Uusi hakutoiminto
+    document.getElementById("searchInput").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const query = encodeURIComponent(this.value.trim());
+            if (query.length > 0) {
+                window.location.href = "galleria.html?search=" + query;
+            }
+        }
     });
+    // Toiminto blogien hakuun (Vanha versio)
+    //document.getElementById('searchInput').addEventListener('input', function() {
+        //const query = this.value.toLowerCase();
+        //const cards = document.querySelectorAll('.blog-card');
+        //let anyVisible = false;
+
+        //cards.forEach(card => {
+            //const title = card.querySelector('.card-title').textContent.toLowerCase();
+            //const match = title.includes(query);
+            //card.parentElement.style.display = match ? '' : 'none';
+            //if (match) anyVisible = true;
+        //});
+
+        //document.getElementById('noResults').style.display = anyVisible ? 'none' : 'block';
+    //});
     // Toiminnot tykkäyksien laskuun.
     function toggleLike(button) {
         const id = button.getAttribute('data-id');
