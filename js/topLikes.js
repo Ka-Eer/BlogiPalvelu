@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 li.tabIndex = 0;
 
                 const a = document.createElement('a');
-                a.href = `blogi.html?id=${encodeURIComponent(id)}`;
+                a.href = `blogit.html?id=${encodeURIComponent(id)}`;
                 a.textContent = title;
 
                 const heart = document.createElement('span');

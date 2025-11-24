@@ -8,6 +8,7 @@ $pages = [
     '' => 'index.html',
     'index' => 'index.html',
     'blogi' => 'blogi.html',
+    'blogit' => 'blogit.html',
     'galleria' => 'galleria.html',
 ];
 

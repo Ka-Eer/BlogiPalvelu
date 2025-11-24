@@ -60,8 +60,8 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
             // Lue lisää linkki
             const read = document.createElement('a');
             read.className = 'btn btn-primary';
-            // linkki tarkemmalle blogisivulle (blogi.html?id=ID)
-            read.href = 'blogi.html?id=' + encodeURIComponent(post.ID);
+            // linkki tarkemmalle blogisivulle (blogit.html?id=ID)
+            read.href = 'blogit.html?id=' + encodeURIComponent(post.ID);
             read.textContent = 'Lue lisää';
             body.appendChild(read);
 
