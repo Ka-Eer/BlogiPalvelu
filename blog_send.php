@@ -17,6 +17,9 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 
+    // aloittaa transaktion ENNEN insertiä
+    $pdo->beginTransaction();
+
     // Haetaan POST datat
     $otsikko = isset($_POST['blogTextTitle']) ? $_POST['blogTextTitle'] : '';
     $teksti = isset($_POST['blogText']) ? $_POST['blogText'] : '';
@@ -36,8 +39,6 @@ try {
     $BT10 = isset($_POST['blogTag10']) ? 1 : 0;
     $BT11 = isset($_POST['blogTag11']) ? 1 : 0;
 
-
-
     $sql = 'INSERT INTO blogit (Pvm, Klo, Otsikko, Teksti, BT1, BT2, BT3, BT4, BT5, BT6, BT7, BT8, BT9, BT10, BT11) VALUES (:pvm, :klo, :otsikko, :teksti, :BT1, :BT2, :BT3, :BT4, :BT5, :BT6, :BT7, :BT8, :BT9, :BT10, :BT11)';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':pvm' => $pvm, ':klo' => $klo, ':otsikko' => $otsikko, ':teksti' => $teksti ,
@@ -46,13 +47,7 @@ try {
         ':BT11' => $BT11
     ]);
 
-    // aloittaa transaktion
-    $pdo->beginTransaction();
-
-    // lisää uuden blogin ilman kuvaa ensin
-    //$sql = 'INSERT INTO blogit (Pvm, Klo, Otsikko, Teksti) VALUES (:pvm, :klo, :otsikko, :teksti)';
-    //$stmt = $pdo->prepare($sql);
-    //$stmt->execute([':pvm' => $pvm, ':klo' => $klo, ':otsikko' => $otsikko, ':teksti' => $teksti]);
+    // Hae juuri luodun rivin ID
     $insertId = $pdo->lastInsertId();
 
     $uploadedPath = null;
