@@ -48,6 +48,8 @@ async function loadLatestPosts() { // lataa uusimmat blogipostaukset
             title.className = 'card-title';
             title.textContent = post.Otsikko || '';
             body.appendChild(title);
+            const hr = document.createElement('hr');
+            body.appendChild(hr);
 
             // Esikatselu teksti
             const text = document.createElement('p');

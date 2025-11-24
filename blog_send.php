@@ -38,13 +38,16 @@ try {
     $BT9 = isset($_POST['blogTag9']) ? 1 : 0;
     $BT10 = isset($_POST['blogTag10']) ? 1 : 0;
     $BT11 = isset($_POST['blogTag11']) ? 1 : 0;
+    $BT12 = isset($_POST['blogTag12']) ? 1 : 0;
 
-    $sql = 'INSERT INTO blogit (Pvm, Klo, Otsikko, Teksti, BT1, BT2, BT3, BT4, BT5, BT6, BT7, BT8, BT9, BT10, BT11) VALUES (:pvm, :klo, :otsikko, :teksti, :BT1, :BT2, :BT3, :BT4, :BT5, :BT6, :BT7, :BT8, :BT9, :BT10, :BT11)';
+
+
+    $sql = 'INSERT INTO blogit (Pvm, Klo, Otsikko, Teksti, BT1, BT2, BT3, BT4, BT5, BT6, BT7, BT8, BT9, BT10, BT11, BT12) VALUES (:pvm, :klo, :otsikko, :teksti, :BT1, :BT2, :BT3, :BT4, :BT5, :BT6, :BT7, :BT8, :BT9, :BT10, :BT11, :BT12)';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':pvm' => $pvm, ':klo' => $klo, ':otsikko' => $otsikko, ':teksti' => $teksti ,
         ':BT1' => $BT1, ':BT2' => $BT2, ':BT3' => $BT3, ':BT4' => $BT4, ':BT5' => $BT5,
         ':BT6' => $BT6, ':BT7' => $BT7, ':BT8' => $BT8, ':BT9' => $BT9, ':BT10' => $BT10,
-        ':BT11' => $BT11
+        ':BT11' => $BT11, ':BT12' => $BT12
     ]);
 
     // Hae juuri luodun rivin ID

@@ -41,51 +41,67 @@
         <label class="form-label" for="blogImg">Lisää Kuva (Valinnainen)</label>
         <br>
         <input class="form-control" type="file" accept="image/*" name="blogImg" id="blogImg">
-        <div class="form-text">Kuvatyypit: jpg/png/gif/webp Maksimikoko: 15 MB.</div>
-        <label class="form-label">Valitse tagit (Valinnainen)</label>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag1" id="blogTag1" value="1">
-            <label class="form-check-label" for="blogTag1">Pelit</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag2" id="blogTag2" value="1">
-            <label class="form-check-label" for="blogTag2">Matkustaminen</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag3" id="blogTag3" value="1">
-            <label class="form-check-label" for="blogTag3">Teknologia & Internet</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag4" id="blogTag4" value="1">
-            <label class="form-check-label" for="blogTag4">Oppiminen & Itsekehitys</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag5" id="blogTag5" value="1">
-            <label class="form-check-label" for="blogTag5">Ruoka & Juoma</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag6" id="blogTag6" value="1">
-            <label class="form-check-label" for="blogTag6">Hyvinvointi & Elämäntyyli</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag7" id="blogTag7" value="1">
-            <label class="form-check-label" for="blogTag7">Luovuus & Kulttuuri</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag8" id="blogTag8" value="1">
-            <label class="form-check-label" for="blogTag8">Työ & Ura</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag9" id="blogTag9" value="1">
-            <label class="form-check-label" for="blogTag9">Koti & Arki</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag10" id="blogTag10" value="1">
-            <label class="form-check-label" for="blogTag10">Tee se itse & Projektit</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name = "blogTag11" id="blogTag11" value="1">
-            <label class="form-check-label" for="blogTag11">Ympäristö & Luonto</label>
+        <div class="form-text">Maksimikoko: 15 MB.</div>
+        <div class="form-control" id="checkBoxForm">
+            <div class="container-fluid row blogiTagContainer">
+                <label class="form-label">Valitse tagit (Valinnainen)</label>
+                <div class="col container-fluid">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag1" id="blogTag1" value="1">
+                        <label class="form-check-label" for="blogTag1">Pelit</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag2" id="blogTag2" value="1">
+                        <label class="form-check-label" for="blogTag2">Matkustaminen</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag3" id="blogTag3" value="1">
+                        <label class="form-check-label" for="blogTag3">Teknologia & Internet</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag4" id="blogTag4" value="1">
+                        <label class="form-check-label" for="blogTag4">Oppiminen & Itsekehitys</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag5" id="blogTag5" value="1">
+                        <label class="form-check-label" for="blogTag5">Ruoka & Juoma</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag6" id="blogTag6" value="1">
+                        <label class="form-check-label" for="blogTag6">Hyvinvointi & Elämäntyyli</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag7" id="blogTag7" value="1">
+                        <label class="form-check-label" for="blogTag7">Luovuus & Kulttuuri</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag8" id="blogTag8" value="1">
+                        <label class="form-check-label" for="blogTag8">Työ & Ura</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag9" id="blogTag9" value="1">
+                        <label class="form-check-label" for="blogTag9">Koti & Arki</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag10" id="blogTag10" value="1">
+                        <label class="form-check-label" for="blogTag10">Tee se itse & Projektit</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag11" id="blogTag11" value="1">
+                        <label class="form-check-label" for="blogTag11">Ympäristö & Luonto</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name = "blogTag12" id="blogTag12" value="1">
+                        <label class="form-check-label" for="blogTag12">Talous & Raha</label>
+                    </div>
+                </div>
+            </div>
         </div>
 
 

@@ -23,5 +23,6 @@ CREATE TABLE `blogit` (
   `BT9` boolean NOT NULL DEFAULT 0,
   `BT10` boolean NOT NULL DEFAULT 0,
   `BT11` boolean NOT NULL DEFAULT 0,
+  `BT12` boolean NOT NULL DEFAULT 0,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
