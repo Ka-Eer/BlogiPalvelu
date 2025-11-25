@@ -36,19 +36,22 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `tagit` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `Pelit` boolean NOT NULL DEFAULT 0,
-  `Matkustaminen` boolean NOT NULL DEFAULT 0,
-  `Teknologia` boolean NOT NULL DEFAULT 0,
-  `Oppiminen` boolean NOT NULL DEFAULT 0,
-  `Ruoka` boolean NOT NULL DEFAULT 0,
-  `Hyvinvointi` boolean NOT NULL DEFAULT 0,
-  `Luovuus` boolean NOT NULL DEFAULT 0,
-  `Työ` boolean NOT NULL DEFAULT 0,
-  `Koti` boolean NOT NULL DEFAULT 0,
-  `Projektit` boolean NOT NULL DEFAULT 0,
-  `Ympäristö` boolean NOT NULL DEFAULT 0,
-  `Talous` boolean NOT NULL DEFAULT 0,
+  `tag_ID` int NOT NULL,
+  `tag_Nimi` varchar(50) NOT NULL,
   
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`tag_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO tagit (tag_ID, tag_Nimi) VALUES 
+(1, 'Pelit'),
+(2, 'Matkustaminen'),
+(3, 'Teknologia & internet'),
+(4, 'Oppiminen & Itsekehitys'),
+(5, 'Ruoka & Juoma'),
+(6, 'Hyvinvointi & Elämäntyyli'),
+(7, 'Luovuus & Kulttuuri'),
+(8, 'Työ & Ura'),
+(9, 'Koti & Arki'),
+(10, 'Tee se itse & Projektit'),
+(11, 'Ympäristö & Luonto'),
+(12, 'Talous & Raha');
