@@ -3,62 +3,71 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-// Yhdistää MySQL tietokantaan
-$dbh = mysqli_connect('localhost', 'root', '', 'blogitekstit');
-if (!$dbh) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Unable to connect to MySQL']);
-    exit;
-}
+try {
+    // MySQL yhdistäminen
+    // oletus XAMPP MySQL asetukset:
+    $dbHost = '127.0.0.1';
+    $dbName = 'blogitekstit';
+    $dbUser = 'root';
+    $dbPass = '';
+    $dsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
 
-//  Hakee uusimmat 8 blogipostausta
-$sql = "SELECT ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY Pvm DESC, Klo DESC LIMIT 8"; // Muuta tarvittaessa rajausta tai järjestystä (ORDER BY, LIMIT)
-$res = mysqli_query($dbh, $sql);
-if (!$res) {
-    http_response_code(500);
-    echo json_encode(['error' => 'DB query failed']);
-    exit;
-}
+    // Luo PDO yhteys
+    $pdo = new PDO($dsn, $dbUser, $dbPass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
 
-$rows = [];
-while ($row = mysqli_fetch_assoc($res)) {
-    // Varmistaa UTF-8 turvallisen uotput ja normalisoi null kuvan
-    $row['Otsikko'] = isset($row['Otsikko']) ? $row['Otsikko'] : '';
-    $row['Teksti'] = isset($row['Teksti']) ? $row['Teksti'] : '';
-    if (!empty($row['Kuva'])) {
-        $k = $row['Kuva'];
-        // Kuva-kenttä voi sisältää:
-        // - jo valmiiksi tallennetun polun kuten 'Kuvat/123/filename.jpg'
-        // - pelkän tiedostonimen kuten 'filename.jpg'
-        // - binääridataa (BLOB)
-        if (is_string($k)) {
-            // Jos kenttä alkaa 'Kuvat/' tai sisältää hakemiston erotin, käytä sitä sellaisenaan
-            if (strpos($k, 'Kuvat/') === 0 || strpos($k, '/') !== false) {
-                // jos polku alkaa ilman johtavaa '/', lisää se jotta URL on aina juurirelatiivinen
-                if (strpos($k, '/') === 0) {
-                    $row['Kuvasrc'] = $k;
+    // hakee uusimmat 8 postausta taulusta blogit päivämäärän ja ajan mukaan; ORDER BY Pvm DESC, Klo DESC LIMIT 8
+    $sql = 'SELECT ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY Pvm DESC, Klo DESC LIMIT 8';
+    $stmt = $pdo->query($sql);
+    $rows = [];//taulukko tuloksille
+    while ($r = $stmt->fetch()) {   // käy läpi rivit
+        // Normalisoi otsikko/teksti
+        $r['Otsikko'] = isset($r['Otsikko']) ? $r['Otsikko'] : '';
+        $r['Teksti'] = isset($r['Teksti']) ? $r['Teksti'] : '';
+        // käsittelee Kuva-kentän
+        if (!empty($r['Kuva'])) { // jos Kuva-kenttä ei ole tyhjä
+            $k = $r['Kuva'];
+            if (is_string($k)) {
+                // Jos Kuva-kenttä on jo polku tai sisältää hakemiston erotin, käytä sellaisenaan
+                if (strpos($k, 'Kuvat/') === 0 || strpos($k, '/') !== false) {
+                    // Jos polku ei ala '/', tee siitä juurirelatiivinen
+                    if (strpos($k, '/') === 0) {
+                        $r['Kuvasrc'] = $k;
+                    } else {
+                        $r['Kuvasrc'] = '/' . $k;
+                    }
+                } elseif (preg_match('/^[0-9A-Za-z_\-\.]+\.[A-Za-z]{2,6}$/', $k) && strlen($k) < 512) {
+                    // pelkkä tiedostonimi -> juurirelatiivinen polku
+                    $r['Kuvasrc'] = '/Kuvat/' . $k;
                 } else {
-                    $row['Kuvasrc'] = '/' . $k;
+                    // muu merkkijono, oletetaan binääri
+                    $r['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
                 }
-            } elseif (preg_match('/^[0-9A-Za-z_\-\.]+\.[A-Za-z]{2,6}$/', $k) && strlen($k) < 512) {
-                // yksinkertainen tiedostonimi ilman polkua -> tee juurirelatiivinen polku
-                $row['Kuvasrc'] = '/Kuvat/' . $k;
             } else {
-                // muut merkkijonot, mahdollista että tietokannassa on binääri tallennettuna
-                $row['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
+                // ei-merkkijono, todennäköisesti BLOB 
+                $r['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
             }
         } else {
-            // ei-merkkijono (todennäköisesti binääri)
-            $row['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
+            // jos ei kuvaa, käytä placeholder
+            $r['Kuvasrc'] = '/Kuvat/Placeholder2.png';
         }
-    } else {
-        //määritä placeholder jos ei ole kuvaa
-        $row['Kuvasrc'] = 'Kuvat/Placeholder2.png';
+
+        // Tykkäykset kokonaislukuna
+        $r['Tykkaykset'] = isset($r['Tykkaykset']) ? (int)$r['Tykkaykset'] : 0;
+
+        $rows[] = $r; // lisää rivit taulukkoon
     }
-    // Varmistaa että Tykkäykset on kokonaisluku
-    $row['Tykkaykset'] = isset($row['Tykkaykset']) ? (int)$row['Tykkaykset'] : 0;
-    $rows[] = $row;
+
+    // Palauttaa JSON datan
+    echo json_encode($rows, JSON_UNESCAPED_UNICODE);
+} catch (PDOException $e) { // käsittelee tietokanta virheet
+    http_response_code(500);
+    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+} catch (Exception $e) {    // käsittelee muut virheet
+    http_response_code(500);
+    echo json_encode(['error' => $e->getMessage()]);
 }
 
-echo json_encode($rows, JSON_UNESCAPED_UNICODE);
 ?>
