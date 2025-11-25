@@ -37,7 +37,7 @@ form {
 .blogiTagContainer {
     gap: 1em;
     background-color:#f8f9fb;
-    border-radius: 2em;
+    border-radius: 1em;
     border: 1px solid #e1e2e4;
     padding: 1em;
     width: fit-content;

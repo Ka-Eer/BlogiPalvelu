@@ -25,4 +25,30 @@ CREATE TABLE `blogit` (
   `BT11` boolean NOT NULL DEFAULT 0,
   `BT12` boolean NOT NULL DEFAULT 0,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `users` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `kayttajaNimi` varchar(50) NOT NULL UNIQUE,
+  `salasana` varchar(255) NOT NULL,
+  check(CHAR_LENGTH(salasana) BETWEEN 8 and 255),
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `tagit` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `Pelit` boolean NOT NULL DEFAULT 0,
+  `Matkustaminen` boolean NOT NULL DEFAULT 0,
+  `Teknologia` boolean NOT NULL DEFAULT 0,
+  `Oppiminen` boolean NOT NULL DEFAULT 0,
+  `Ruoka` boolean NOT NULL DEFAULT 0,
+  `Hyvinvointi` boolean NOT NULL DEFAULT 0,
+  `Luovuus` boolean NOT NULL DEFAULT 0,
+  `Työ` boolean NOT NULL DEFAULT 0,
+  `Koti` boolean NOT NULL DEFAULT 0,
+  `Projektit` boolean NOT NULL DEFAULT 0,
+  `Ympäristö` boolean NOT NULL DEFAULT 0,
+  `Talous` boolean NOT NULL DEFAULT 0,
+  
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
