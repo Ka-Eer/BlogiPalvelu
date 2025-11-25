@@ -9,7 +9,7 @@ async function loadLatestPosts() { // lataa uusimmat blogipostaukset
     // hae blogipostaukset palvelimelta
     try {
         const res = await fetch('get_latest.php');// kutsuu get_latest.php
-        if (!res.ok) throw new Error('Network response not ok');
+        if (!res.ok) throw new Error('Network response not ok'); // tarkistaa että vastaus on ok
         const posts = await res.json();
 
         // tyhjennä vanhat tulokset
@@ -22,11 +22,11 @@ async function loadLatestPosts() { // lataa uusimmat blogipostaukset
         // piilota "ei tuloksia" -viesti
         noResults.style.display = 'none';
 
-        
+
         // Korttien renderöinti
         posts.forEach(post => { // käydään jokainen postaus läpi
             const col = document.createElement('div');
-            col.className = 'col-12 col-sm-6 col-lg-4 col-xl-3';
+            col.className = 'col-12 col-sm-6 col-lg-4 col-xl-3';//BS sarake luokat
 
             //Luo kortti
             const card = document.createElement('div');
@@ -48,14 +48,16 @@ async function loadLatestPosts() { // lataa uusimmat blogipostaukset
             title.className = 'card-title';
             title.textContent = post.Otsikko || '';
             body.appendChild(title);
+
+            // erotinviiva
             const hr = document.createElement('hr');
             body.appendChild(hr);
 
             // Esikatselu teksti
             const text = document.createElement('p');
             text.className = 'card-text';
-            // esikatselu (max 140 merkkiä)
             const preview = (post.Teksti || '').replace(/\s+/g, ' ').trim(); 
+            //esikatselu (max 140 merkkiä)
             text.textContent = preview.length > 140 ? preview.slice(0,140) + '…' : preview;
             body.appendChild(text);
 
@@ -112,6 +114,7 @@ async function loadLatestPosts() { // lataa uusimmat blogipostaukset
             metaLikes.appendChild(likeCount);
             meta.appendChild(metaLikes);
 
+            // koko kortin rakentaminen
             card.appendChild(body);
             col.appendChild(card);
             container.appendChild(col);

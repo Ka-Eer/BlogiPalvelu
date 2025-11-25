@@ -6,10 +6,10 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
     const noResults = document.getElementById('noResults');
     if (!container) return; // jos ei löydy, lopeta
 
-    // hae blogipostaukset palvelimelta
+    // hakee tiedot palvelimelta
     try {
         const res = await fetch('get_galleria.php');//kutsuu get_galleria.php
-        if (!res.ok) throw new Error('Network response not ok');
+        if (!res.ok) throw new Error('Network response not ok');// tarkistaa että vastaus on ok
         const posts = await res.json();
 
         // tyhjennä vanhat tulokset
@@ -48,14 +48,16 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
             title.className = 'card-title';
             title.textContent = post.Otsikko || '';
             body.appendChild(title);
+
+            // erotinviiva
             const hr = document.createElement('hr');
             body.appendChild(hr);
 
             //esikatselu teksti
             const text = document.createElement('p');
             text.className = 'card-text';
-            //esikatselu (max 140 merkkiä)
             const preview = (post.Teksti || '').replace(/\s+/g, ' ').trim();
+            //esikatselu (max 140 merkkiä)
             text.textContent = preview.length > 140 ? preview.slice(0,140) + '…' : preview;
             body.appendChild(text);
 
@@ -112,6 +114,7 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
             metaLikes.appendChild(likeCount);
             meta.appendChild(metaLikes);
 
+            // koko kortin rakentaminen
             card.appendChild(body);
             col.appendChild(card);
             container.appendChild(col);

@@ -1,17 +1,21 @@
+// js/blogSubmit.js
+// Lomakkeen lähetys blogipostauksen tekemiseen
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('BlogForm');
     const msg = document.getElementById('postMessage');
     if (!form || !msg) return;
 
+    // lomakkeen lähetys tapahtuma
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         msg.style.display = 'none';
         msg.textContent = '';
-        // clear previous file error
+        // tyhjennä aiempi tiedostovirhe
         const fileError = document.getElementById('fileError');
         if (fileError) { fileError.style.display = 'none'; fileError.textContent = ''; }
 
-        // client-side file size check (match server 15 MB limit)
+        // tarkista tiedoston koko client-puolella (vastaamaan palvelimen 15 MB rajaa)
         const fileInput = form.querySelector('#blogImg');
         if (fileInput && fileInput.files && fileInput.files.length > 0) {
             const f = fileInput.files[0];
@@ -26,22 +30,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Poista lähetysnappi käytöstä estämään kaksoislähetykset
         const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
 
+        // Lähetä lomake palvelimelle
         try {
             const fd = new FormData(form);
-            const res = await fetch(form.action || 'blog_send.php', {
+            const res = await fetch(form.action || 'blog_send.php', { //blog_send.php
                 method: 'POST',
                 body: fd
             });
 
+            // luetaan palvelimen vastaus tekstinä
             const text = await res.text();
 
             // jos PHP palauttaa "Toimii" oletamme onnistuneen tallennuksen
             const success = res.ok && /toim(i|ii)/i.test(text);
 
-            if (success) {
+            // Näytä viesti käyttäjälle
+            if (success) { // onnistui
                 msg.style.display = '';
                 msg.style.background = '#d4edda';
                 msg.style.color = '#155724';
@@ -51,17 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Tyhjennä lomake kentät
                 form.reset();
-
-                // Poista mahdollinen paikallinen esikatselu tai päivitä näkymää tarvittaessa
-            } else {
+            } else {// epäonnistui
                 msg.style.display = '';
                 msg.style.background = '#f8d7da';
                 msg.style.color = '#721c24';
                 msg.style.padding = '10px 12px';
                 msg.style.borderRadius = '6px';
+                // virheviesti palvelimelta
                 msg.textContent = 'Virhe lähetyksessä. Palvelimen vastaus: ' + text;
             }
-        } catch (err) {
+        } catch (err) { // verkko- tai muu virhe
             console.error('Submit failed', err);
             msg.style.display = '';
             msg.style.background = '#f8d7da';
@@ -69,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             msg.style.padding = '10px 12px';
             msg.style.borderRadius = '6px';
             msg.textContent = 'Virhe: ' + (err.message || 'lähetys epäonnistui');
-        } finally {
+        } finally { // ota lähetysnappi takaisin käyttöön
             if (submitBtn) submitBtn.disabled = false;
         }
     });
