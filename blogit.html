@@ -11,34 +11,34 @@
     <link rel="stylesheet" href="galleria.css">
 </head>
 <body>
-<header class="Header_Top">
-    <h1 class="text-center">Blogi</h1>
-</header>
-
-<!-- Navigaatio -->
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">Logo</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Etusivu</a></li>
-                <li class="nav-item"><a class="nav-link" href="blogi.html">Blogi</a></li>
-                <li class="nav-item"><a class="nav-link" href="galleria.html">Galleria</a></li>
-            </ul>
+    <!--Otsikko-->
+    <header class="Otsikko1">
+        <h1>Blogi</h1>
+    </header>
+    <!-- Navigaatio -->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Etusivu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blogi.html">Blogi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="galleria.html">Galleria</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- Pääsisältö -->
-<main class="container py-4" id="post-root">
-    <div id="post" class="">
-        <!-- Postaus renderöidään tänne -->
-        <div id="loading" class="text-center py-5">Ladataan...</div>
-    </div>
-</main>
+    <!-- Pääsisältö -->
+    <main class="container py-4" id="post-root">
+        <div id="post" class="">
+            <!-- Postaus renderöidään tänne -->
+            <div id="loading" class="text-center py-5">Ladataan...</div>
+        </div>
+    </main>
 
 <!-- Scriptit -->
 <script>
@@ -49,32 +49,33 @@
         return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
+    // Hakee URL-parametrit
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     const root = document.getElementById('post');
     const loading = document.getElementById('loading');
 
-    if (!id) {
+    if (!id) {  //tarkistaa että id on määritetty
         root.innerHTML = '<div class="alert alert-warning">Postauksen ID puuttuu URL-osoitteesta.</div>';
         return;
     }
 
+    // Hakee postauksen tiedot palvelimelta
     fetch('get_post.php?id=' + encodeURIComponent(id))
-        .then(resp => {
-            if (!resp.ok) {
+        .then(resp => {// tarkistaa vastauksen
+            if (!resp.ok) { //jos ei ok, heittää virheen
                 if (resp.status === 404) throw new Error('Postausta ei löydy');
                 throw new Error('Palvelinvirhe');
             }
             return resp.json();
         })
-        .then(data => {
-            // Jos palvelin palauttaa error-objektin
-            if (data && data.error) {
+        .then(data => {// käsittelee JSON-datan
+            if (data && data.error) {   // Jos palvelin palauttaa error-objektin
                 root.innerHTML = '<div class="alert alert-danger">' + escapeHtml(data.error) + '</div>';
                 return;
             }
 
-            // renderöidään post
+            // postauksen tiedot
             const title = escapeHtml(data.Otsikko || '');
             const date = escapeHtml(data.Pvm || '');
             const time = escapeHtml((data.Klo || '').slice(0,5));
@@ -84,26 +85,28 @@
 
             // tagit vastaavat BT1..BT11
             const tagLabels = ['Pelit','Matkustaminen','Teknologia & Internet','Oppiminen & Itsekehitys','Ruoka & Juoma','Hyvinvointi & Elämäntyyli','Luovuus & Kulttuuri','Työ & Ura','Koti & Arki','Tee se itse & Projektit','Ympäristö & Luonto'];
-
+            
+            // RAKENTAA HTML:n
             let html = '';
             html += '<div class="mb-4">';
-            // Kuva
+            // blogin Kuva
             if (imgSrc) {
                 html += '<img src="' + escapeHtml(imgSrc) + '" class="" style="max-width:100%;height:auto;" alt="Postauksen kuva">';
             }
+
+            // blogin sisältö
             html += '<div class="">';
             // Otsikko
             html += '<h2 class="">' + title + '</h2>';
-
             // renderöidään tagit Bootstrap badgeina
             let tagsHtml = '';
-            for (let i = 0; i < tagLabels.length; i++) {
+            for (let i = 0; i < tagLabels.length; i++) { // käy läpi tagit
                 const key = 'BT' + (i + 1);
                 if (data[key]) {
                     tagsHtml += '<span class="badge bg-primary me-1">' + escapeHtml(tagLabels[i]) + '</span>';
                 }
             }
-            if (tagsHtml) {
+            if (tagsHtml) { // jos on tageja, renderöidään ne
                 html += '<div class="mb-2">' + tagsHtml + '</div>';
             }
 
@@ -118,14 +121,16 @@
             likeHtml += '</div>';
             likeHtml += '<div><span id="likes-' + escapeHtml(postId) + '" class="like-count">' + likes + '</span></div>';
             likeHtml += '</div>';
-
+            // Päivämäärä ja aika + tykkäykset
             html += '<div class="text-muted mb-3">' + date + ' ' + time + ' &middot; </div>' + likeHtml;
-            // Säilytä rivinvaihdot perus-HTML:ksi
+            
+            // Blogin teksti ja kappalejako
             const paragraphs = content.split(/\r?\n\r?\n/).map(p => '<p>' + escapeHtml(p).replace(/\n/g, '<br>') + '</p>').join('\n');
             html += '<div class="">' + paragraphs + '</div>';
             html += '</div>';
             html += '</div>';
 
+            // asettaa HTML:n juureen
             root.innerHTML = html;
 
             // Liitetään tykkäyspainikkeiden kuuntelijat
@@ -161,11 +166,11 @@
                 });
             }
         })
-        .catch(err => {
+        .catch(err => { // käsittelee virheet
             console.error(err);
             root.innerHTML = '<div class="alert alert-danger">' + escapeHtml(err.message || 'Virhe haettaessa postausta') + '</div>';
         })
-        .finally(() => {
+        .finally(() => { // poistaa latausilmoituksen
             if (loading && loading.parentNode) loading.remove();
         });
 })();

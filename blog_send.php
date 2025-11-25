@@ -7,11 +7,13 @@ blogi.html ja send.php tulevat olla xampp > htdocs kansiossa, jolloin ne voi ava
 try {
     //oletus XAMPP MySQL asetukset:
     $dbHost = '127.0.0.1';
+    //Tietokannan nimi josta haetaan; $dbName = 'blogitekstit';
     $dbName = 'blogitekstit';
     $dbUser = 'root';
     $dbPass = '';
     $dsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
 
+    // Luo PDO yhteys
     $pdo = new PDO($dsn, $dbUser, $dbPass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -41,7 +43,7 @@ try {
     $BT12 = isset($_POST['blogTag12']) ? 1 : 0;
 
 
-
+    // Insert blogipostaus tietokantaan ilman kuvaa
     $sql = 'INSERT INTO blogit (Pvm, Klo, Otsikko, Teksti, BT1, BT2, BT3, BT4, BT5, BT6, BT7, BT8, BT9, BT10, BT11, BT12) VALUES (:pvm, :klo, :otsikko, :teksti, :BT1, :BT2, :BT3, :BT4, :BT5, :BT6, :BT7, :BT8, :BT9, :BT10, :BT11, :BT12)';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':pvm' => $pvm, ':klo' => $klo, ':otsikko' => $otsikko, ':teksti' => $teksti ,
@@ -60,23 +62,23 @@ try {
         // validoi tiedoston koko ja tyyppi
         $maxBytes = 15 * 1024 * 1024; // 15 MB limit
         $fileSize = $_FILES['blogImg']['size'];
-        if ($fileSize > $maxBytes) {
+        if ($fileSize > $maxBytes) {//jos tiedosto on liian suuri
             throw new Exception('Tiedosto ylittää sallitun koon.');
         }
 
+        // tarkista tiedoston tyyppi
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->file($_FILES['blogImg']['tmp_name']);
-        $allowed = [
+        $allowed = [ // sallitut tiedostotyypit
             'image/jpeg' => 'jpg',
             'image/png' => 'png',
             'image/gif' => 'gif',
             'image/webp' => 'webp'
         ];
-        if (!array_key_exists($mime, $allowed)) {
+        if (!array_key_exists($mime, $allowed)) {//jos väärä tiedostotyyppi
             throw new Exception('Tiedostomuoto ei ole sallittu.');
         }
 
-        // Prepare Kuvat directory and per-ID folder
         // valmistaa Kuvat hakemiston ja per-ID kansion
         $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'Kuvat';
         if (!is_dir($baseDir)) {
@@ -85,6 +87,7 @@ try {
             }
         }
 
+        // Luo kansio kuvalle käyttäen juuri lisätyn rivin ID:tä
         $idDir = $baseDir . DIRECTORY_SEPARATOR . $insertId;
         if (!is_dir($idDir)) {
             if (!mkdir($idDir, 0755, true) && !is_dir($idDir)) {
@@ -92,16 +95,16 @@ try {
             }
         }
 
-        // Siivoaa alkuperäisen tiedostonimen ja luo sille uuden uniikin
+        // Siivoaa alkuperäisen tiedostonimen ja luo sille uuden uniikin nimen
         $origName = isset($_FILES['blogImg']['name']) ? $_FILES['blogImg']['name'] : 'upload';
         $ext = $allowed[$mime];
         $baseName = pathinfo($origName, PATHINFO_FILENAME);
-        // Korvaa epäkelvolliset merkit
+        // Korvaa epäkelvolliset merkit tiedostonimessä
         $safeBase = preg_replace('/[^A-Za-z0-9_\-]/', '_', $baseName);
         $safeBase = substr($safeBase, 0, 200);
         $newFilename = $safeBase . '_' . time() . '.' . $ext;
 
-        $targetRel = 'Kuvat/' . $insertId . '/' . $newFilename; // relative path to store in DB
+        $targetRel = 'Kuvat/' . $insertId . '/' . $newFilename;//relatiivinen polku tietokantaan
         $targetPath = $idDir . DIRECTORY_SEPARATOR . $newFilename;
 
         if (!move_uploaded_file($_FILES['blogImg']['tmp_name'], $targetPath)) {
@@ -118,21 +121,21 @@ try {
         $uploadedPath = $targetRel;
     }
 
-    // sitoudu transaktioon
+    // commit transaktio
     $pdo->commit();
 
-    // For backward compatibility keep returning 'Toimii'
+    // taaksepäin yhteensopivuuden vuoksi palautetaan 'Toimii'
     echo 'Toimii';
-} catch (Exception $e) {
+} catch (Exception $e) { // katkaise transaktio virhetilanteessa
     if (isset($pdo) && $pdo->inTransaction()) {
         $pdo->rollBack();
     }
-    // If we created a file, try to remove it
+    // jos tiedosto luotiin ennen virhettä, poista se
     if (!empty($targetPath) && file_exists($targetPath)) {
         @unlink($targetPath);
     }
     http_response_code(500);
-    // For debugging you can echo the message; in production consider logging instead
+    // Virheilmoitus voidaan näyttää tai kirjata logiin
     echo 'Error: ' . $e->getMessage();
 }
 ?>

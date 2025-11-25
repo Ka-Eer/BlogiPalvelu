@@ -23,9 +23,6 @@ try {
     $stmt = $pdo->query($sql);
     $rows = [];//taulukko tuloksille
     while ($r = $stmt->fetch()) {   // käy läpi rivit
-        // Normalisoi otsikko/teksti
-        $r['Otsikko'] = isset($r['Otsikko']) ? $r['Otsikko'] : '';
-        $r['Teksti'] = isset($r['Teksti']) ? $r['Teksti'] : '';
         // käsittelee Kuva-kentän
         if (!empty($r['Kuva'])) { // jos Kuva-kenttä ei ole tyhjä
             $k = $r['Kuva'];
@@ -50,17 +47,17 @@ try {
                 $r['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
             }
         } else {
-            // jos ei kuvaa, käytä placeholder
-            $r['Kuvasrc'] = '/Kuvat/Placeholder2.png';
+            // jos ei kuvaa, null
+            $r['Kuvasrc'] = null;
         }
 
         // Tykkäykset kokonaislukuna
         $r['Tykkaykset'] = isset($r['Tykkaykset']) ? (int)$r['Tykkaykset'] : 0;
 
-        $rows[] = $r; // lisää rivit taulukkoon
+        $rows[] = $r; // tiedot lisätään taulukkoon
     }
 
-    // Palauttaa JSON datan
+    // Palauttaa JSON datan muuttujasta $rows
     echo json_encode($rows, JSON_UNESCAPED_UNICODE);
 } catch (PDOException $e) { // käsittelee tietokanta virheet
     http_response_code(500);

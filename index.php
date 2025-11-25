@@ -21,7 +21,7 @@ if (array_key_exists($req, $pages)) {
         // välttää tiedoston lataaminen kokonaan muistiin ennen lähettämistä
         readfile($file);
         exit;
-    } else {
+    } else {    // tiedostoa ei löydy
         http_response_code(404);
         echo "<h1>404 Not Found</h1><p>File not found: " . htmlspecialchars($pages[$req]) . "</p>";
         exit;

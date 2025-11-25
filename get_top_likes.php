@@ -8,32 +8,33 @@ try {
     // MySQL yhdistäminen
     // Oletus XAMPP MySQL asetukset:
     $dbHost = '127.0.0.1';
-    //Tietokannan nimi josta haetaan; $dbName = 'blogitekstit';
-    $dbName = 'blogitekstit';
+    $dbName = 'blogitekstit'; //Tietokannan nimi josta haetaan; $dbName = 'blogitekstit';
     $dbUser = 'root';
     $dbPass = '';
     $dsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
 
+    // Luo PDO yhteys
     $pdo = new PDO($dsn, $dbUser, $dbPass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 
-    // Haetaan top 10 tykkäysten mukaan
+    // Haetaan tiedot tietokannasta taulusta blogit top 10 tykkäysten mukaan; ORDER BY Tykkaykset DESC LIMIT 10
     $sql = 'SELECT ID, Otsikko, Tykkaykset FROM blogit ORDER BY Tykkaykset DESC, Pvm DESC, ID DESC LIMIT 10';
     $stmt = $pdo->query($sql);
-    $rows = $stmt->fetchAll();
+    $rows = $stmt->fetchAll();  // haetaan kaikki rivit taulukkoon
 
     // Varmista että Tykkaykset on numero
     foreach ($rows as &$r) {
         $r['Tykkaykset'] = isset($r['Tykkaykset']) ? (int)$r['Tykkaykset'] : 0;
     }
 
+    // Palauttaa JSON datan muuttujasta $rows
     echo json_encode($rows, JSON_UNESCAPED_UNICODE);
-} catch (PDOException $e) {
+} catch (PDOException $e) { // käsittelee tietokanta virheet
     http_response_code(500);
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-} catch (Exception $e) {
+} catch (Exception $e) { // käsittelee muut virheet
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
 }

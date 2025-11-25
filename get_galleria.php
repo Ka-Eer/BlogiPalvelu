@@ -48,13 +48,13 @@ try {
                 $r['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
             }
         } else {
-            // jos ei kuvaa, käytä placeholder
-            $r['Kuvasrc'] = '/Kuvat/Placeholder2.png';
+            // jos ei kuvaa, null
+            $r['Kuvasrc'] = null;
         }
-        $rows[] = $r; // lisää rivit taulukkoon
+        $rows[] = $r; //tiedot lisätään taulukkoon
     }
 
-    // Palauttaa JSON datan
+    // Palauttaa JSON datan muuttujasta $rows
     echo json_encode($rows, JSON_UNESCAPED_UNICODE);
 } catch (PDOException $e) {// käsittelee tietokanta virheet
     http_response_code(500);
