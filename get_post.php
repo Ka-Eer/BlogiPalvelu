@@ -35,11 +35,17 @@ try {
         exit;
     }
 
-    // Hakee yhden postauksen taulusta blogit id:n perusteella
-    $sql = 'SELECT blog_ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset, BT1, BT2, BT3, BT4, BT5, BT6, BT7, BT8, BT9, BT10, BT11, BT12 FROM blogit WHERE blog_ID = ? LIMIT 1';
+        // Hakee yhden postauksen ja laskee tykkäykset likes-taulusta (ilman BT1-BT12)
+        $sql = 'SELECT b.blog_ID, b.Pvm, b.Klo, b.Otsikko, b.Teksti, b.Kuva, 
+                 COUNT(l.user_ID) AS Tykkaykset
+             FROM blogit b
+             LEFT JOIN likes l ON b.blog_ID = l.blog_ID
+             WHERE b.blog_ID = ?
+             GROUP BY b.blog_ID, b.Pvm, b.Klo, b.Otsikko, b.Teksti, b.Kuva
+             LIMIT 1';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
-    $row = $stmt->fetch(); // rivi muuttuja fetchatusta tuloksesta
+    $row = $stmt->fetch();
 
     // tarkistaa löytyykö rivi
     if (!$row) {
@@ -76,12 +82,19 @@ try {
         $row['Kuvasrc'] = null;
     }
 
-    // Tykkäykset kokonaislukuna
-    $row['Tykkaykset'] = isset($row['Tykkaykset']) ? (int)$row['Tykkaykset'] : 0;
+    // Tykkäykset kokonaislukuna (nyt lasketaan likes-taulusta)
+    $row['Tykkaykset'] = (int)$row['Tykkaykset'];
     // Muuta ID -> blog_ID myös JSON:iin
     if (isset($row['blog_ID'])) {
         $row['ID'] = $row['blog_ID'];
     }
+
+    // Hae tagit tälle blogille (nimet ja id:t)
+    $tagSql = 'SELECT t.tag_ID, t.tag_Nimi FROM blog_tag bt JOIN tagit t ON bt.tag_ID = t.tag_ID WHERE bt.blog_ID = ? ORDER BY t.tag_ID ASC';
+    $tagStmt = $pdo->prepare($tagSql);
+    $tagStmt->execute([$row['blog_ID']]);
+    $tags = $tagStmt->fetchAll();
+    $row['Tagit'] = $tags;
 
     // Palauttaa JSON datan muuttujasta $row
     echo json_encode($row, JSON_UNESCAPED_UNICODE);

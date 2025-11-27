@@ -19,11 +19,15 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 
-    // Hakee galleriaan tiedot tietokannan taulusta blogit
-    $sql = 'SELECT blog_ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY blog_ID ASC';
-    $stmt = $pdo->query($sql);
-    $rows = []; //taulukko tuloksille
-    while ($r = $stmt->fetch()) { // käy läpi rivit
+        // Hakee galleriaan tiedot ja laskee tykkäykset likes-taulusta
+        $sql = 'SELECT b.blog_ID, b.Pvm, b.Klo, b.Otsikko, b.Teksti, b.Kuva, COUNT(l.user_ID) AS Tykkaykset
+            FROM blogit b
+            LEFT JOIN likes l ON b.blog_ID = l.blog_ID
+            GROUP BY b.blog_ID, b.Pvm, b.Klo, b.Otsikko, b.Teksti, b.Kuva
+            ORDER BY b.blog_ID ASC';
+        $stmt = $pdo->query($sql);
+        $rows = [];
+        while ($r = $stmt->fetch()) {
         // käsittelee Kuva-kentän
         if (!empty($r['Kuva'])) { // jos Kuva-kenttä ei ole tyhjä
             $k = $r['Kuva'];
@@ -51,11 +55,20 @@ try {
             // jos ei kuvaa, null
             $r['Kuvasrc'] = null;
         }
+        // Tykkäykset kokonaislukuna (nyt lasketaan likes-taulusta)
+        $r['Tykkaykset'] = (int)$r['Tykkaykset'];
         // Muuta ID -> blog_ID myös JSON:iin
         if (isset($r['blog_ID'])) {
             $r['ID'] = $r['blog_ID'];
         }
-        $rows[] = $r; //tiedot lisätään taulukkoon
+
+        // Hae tagit tälle blogille (nimet ja id:t)
+        $tagSql = 'SELECT t.tag_ID, t.tag_Nimi FROM blog_tag bt JOIN tagit t ON bt.tag_ID = t.tag_ID WHERE bt.blog_ID = ? ORDER BY t.tag_ID ASC';
+        $tagStmt = $pdo->prepare($tagSql);
+        $tagStmt->execute([$r['blog_ID']]);
+        $tags = $tagStmt->fetchAll();
+        $r['Tagit'] = $tags;
+        $rows[] = $r;
     }
 
     // Palauttaa JSON datan muuttujasta $rows

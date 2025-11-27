@@ -28,32 +28,26 @@ try {
     $pvm = date('Y-m-d');
     $klo = date('H:i:s');
 
-    // jos löytyy parempaa tapaa niin käytä sitä 
-    $BT1 = isset($_POST['blogTag1']) ? 1 : 0;
-    $BT2 = isset($_POST['blogTag2']) ? 1 : 0;
-    $BT3 = isset($_POST['blogTag3']) ? 1 : 0;
-    $BT4 = isset($_POST['blogTag4']) ? 1 : 0;
-    $BT5 = isset($_POST['blogTag5']) ? 1 : 0;
-    $BT6 = isset($_POST['blogTag6']) ? 1 : 0;
-    $BT7 = isset($_POST['blogTag7']) ? 1 : 0;
-    $BT8 = isset($_POST['blogTag8']) ? 1 : 0;
-    $BT9 = isset($_POST['blogTag9']) ? 1 : 0;
-    $BT10 = isset($_POST['blogTag10']) ? 1 : 0;
-    $BT11 = isset($_POST['blogTag11']) ? 1 : 0;
-    $BT12 = isset($_POST['blogTag12']) ? 1 : 0;
 
 
-    // Insert blogipostaus tietokantaan ilman kuvaa
-    $sql = 'INSERT INTO blogit (Pvm, Klo, Otsikko, Teksti, BT1, BT2, BT3, BT4, BT5, BT6, BT7, BT8, BT9, BT10, BT11, BT12) VALUES (:pvm, :klo, :otsikko, :teksti, :BT1, :BT2, :BT3, :BT4, :BT5, :BT6, :BT7, :BT8, :BT9, :BT10, :BT11, :BT12)';
+    // Insert blogipostaus tietokantaan ilman kuvaa ja tageja
+    $sql = 'INSERT INTO blogit (Pvm, Klo, Otsikko, Teksti) VALUES (:pvm, :klo, :otsikko, :teksti)';
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([':pvm' => $pvm, ':klo' => $klo, ':otsikko' => $otsikko, ':teksti' => $teksti ,
-        ':BT1' => $BT1, ':BT2' => $BT2, ':BT3' => $BT3, ':BT4' => $BT4, ':BT5' => $BT5,
-        ':BT6' => $BT6, ':BT7' => $BT7, ':BT8' => $BT8, ':BT9' => $BT9, ':BT10' => $BT10,
-        ':BT11' => $BT11, ':BT12' => $BT12
-    ]);
+    $stmt->execute([':pvm' => $pvm, ':klo' => $klo, ':otsikko' => $otsikko, ':teksti' => $teksti]);
 
     // Hae juuri luodun rivin ID
     $insertId = $pdo->lastInsertId();
+
+    // Tallenna tagit blog_tag-liitostauluun: käydään kaikki tagit-taulun tag_ID:t läpi ja tarkistetaan löytyykö POSTista blogTagN
+    $tagStmt = $pdo->prepare('INSERT INTO blog_tag (blog_ID, tag_ID) VALUES (?, ?)');
+    $tagQuery = $pdo->query('SELECT tag_ID FROM tagit');
+    $allTags = $tagQuery->fetchAll(PDO::FETCH_COLUMN);
+    foreach ($allTags as $tagId) {
+        $key = 'blogTag' . $tagId;
+        if (!empty($_POST[$key])) {
+            $tagStmt->execute([$insertId, $tagId]);
+        }
+    }
 
     $uploadedPath = null;
 

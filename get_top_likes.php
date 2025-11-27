@@ -19,15 +19,18 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 
-    // Haetaan tiedot tietokannasta taulusta blogit top 10 tykkäysten mukaan; ORDER BY Tykkaykset DESC LIMIT 10
-    $sql = 'SELECT blog_ID, Otsikko, Tykkaykset FROM blogit ORDER BY Tykkaykset DESC, Pvm DESC, blog_ID DESC LIMIT 10';
+    // Haetaan blogit ja lasketaan tykkäykset likes-taulusta
+    $sql = 'SELECT b.blog_ID, b.Otsikko, COUNT(l.user_ID) AS Tykkaykset
+            FROM blogit b
+            LEFT JOIN likes l ON b.blog_ID = l.blog_ID
+            GROUP BY b.blog_ID, b.Otsikko
+            ORDER BY Tykkaykset DESC, b.Pvm DESC, b.blog_ID DESC
+            LIMIT 10';
     $stmt = $pdo->query($sql);
-    $rows = $stmt->fetchAll();  // haetaan kaikki rivit taulukkoon
-
-    // Varmista että Tykkaykset on numero
+    $rows = $stmt->fetchAll();
+    // Muuta ID -> blog_ID myös JSON:iin
     foreach ($rows as &$r) {
-        $r['Tykkaykset'] = isset($r['Tykkaykset']) ? (int)$r['Tykkaykset'] : 0;
-        // Muuta ID -> blog_ID myös JSON:iin
+        $r['Tykkaykset'] = (int)$r['Tykkaykset'];
         if (isset($r['blog_ID'])) {
             $r['ID'] = $r['blog_ID'];
         }
