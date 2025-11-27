@@ -119,11 +119,14 @@ async function loadLatestPosts() { // lataa uusimmat blogipostaukset
             col.appendChild(card);
             container.appendChild(col);
 
-            // koko kortti klikattavaksi (navigoi samaan href:iin kuin 'Lue lisää')
+            // koko kortti klikattavaksi (avaa modalin)
             const cardNavigate = (event) => {
                 // ignooraa klikkaukset, jotka tulevat sydännapista tai sen lapsielementeistä tai lue lisää -linkistä
                 if (event.target.closest('.heart-button') || event.target.closest('a')) return;
-                window.location.href = read.href;
+                // Avaa modal täydellä blogitekstillä
+                if (typeof openBlogModal === 'function') {
+                    openBlogModal(post);
+                }
             };
             card.addEventListener('click', cardNavigate);
             // näppäimmistö: Enter tai Space kun kortti on focussattuna
@@ -133,7 +136,10 @@ async function loadLatestPosts() { // lataa uusimmat blogipostaukset
                     const active = document.activeElement;
                     if (active && (active.classList && (active.classList.contains('heart-button') || active.tagName === 'A'))) return;
                     e.preventDefault();
-                    window.location.href = read.href;
+                    // Avaa modal täydellä blogitekstillä
+                    if (typeof openBlogModal === 'function') {
+                        openBlogModal(post);
+                    }
                 }
             });
         });

@@ -59,6 +59,37 @@
         </div>
     </div>
 
+    <!-- Bootstrap Modal blogipostaukselle -->
+    <div class="modal fade" id="blogModal" tabindex="-1" aria-labelledby="blogModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="blogModalLabel">Blogipostaus</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sulje"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Kuva" class="img-fluid mb-3" style="width: 100%; max-height: 400px; object-fit: cover;">
+                    <h4 id="modalTitle"></h4>
+                    <hr>
+                    <p id="modalText" style="white-space: pre-wrap;"></p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small id="modalDate" class="text-muted"></small>
+                        <span class="like-btn">
+                            <button class="heart-button" id="modalHeartButton" aria-pressed="false" title="Tykkää" data-id="" aria-label="Tykkää">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </button>
+                            <span class="like-count" id="modalLikeCount">0</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sulje</button>
+                    <a id="modalOpenBlogLink" href="#" class="btn btn-primary">Avaa blogi</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scriptit -->
     <script>
     // Uusi hakutoiminto
@@ -122,6 +153,48 @@
             });
         });
     });
+
+    // Funktio modalin avaamiseen blogidatalla
+    function openBlogModal(post) {
+        document.getElementById('modalTitle').textContent = post.Otsikko || '';
+        document.getElementById('modalText').textContent = post.Teksti || '';
+        document.getElementById('modalImage').src = post.Kuvasrc || 'Kuvat/Placeholder2.png';
+        
+        const timeOnly = post.Klo ? post.Klo.slice(0, 5) : '';
+        document.getElementById('modalDate').textContent = post.Pvm + ' ' + timeOnly;
+        
+        const modalHeartBtn = document.getElementById('modalHeartButton');
+        modalHeartBtn.setAttribute('data-id', String(post.ID));
+        
+        const modalLikeCount = document.getElementById('modalLikeCount');
+        modalLikeCount.textContent = String(post.Tykkaykset || 0);
+        // Aseta ID uudelleen joka kerta kun modal avataan
+        modalLikeCount.id = 'likes-' + post.ID;
+        
+        // Aseta "Avaa blogi" -linkki
+        document.getElementById('modalOpenBlogLink').href = 'blogit.html?id=' + encodeURIComponent(post.ID);
+        
+        // Poista vanhat event listenerit kloonaamalla
+        const newModalHeartBtn = modalHeartBtn.cloneNode(true);
+        modalHeartBtn.parentNode.replaceChild(newModalHeartBtn, modalHeartBtn);
+        
+        // Lisää event listener modalin tykkäysnappiin
+        newModalHeartBtn.onclick = (e) => {
+            e.preventDefault();
+            toggleLike(newModalHeartBtn);
+        };
+        
+        // Avaa modal
+        const modalElement = document.getElementById('blogModal');
+        const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+        modal.show();
+        
+        // Palauta ID takaisin modalLikeCount:ksi kun modal suljetaan
+        modalElement.addEventListener('hidden.bs.modal', function resetId() {
+            modalLikeCount.id = 'modalLikeCount';
+            modalElement.removeEventListener('hidden.bs.modal', resetId);
+        });
+    }
 </script>
     <script src="js/latestPosts.js" defer></script>
     <script src="js/topLikes.js" defer></script>
