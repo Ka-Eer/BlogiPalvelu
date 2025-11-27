@@ -1,0 +1,34 @@
+.Otsikko1 {
+    background-image: url(Kuvat/Placeholder.png);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+    position: relative;
+}
+.Otsikko1::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+.Otsikko1 h1 {
+    position: relative;
+    z-index: 2;
+    font-size: 8rem;
+    font-weight: bold;
+}
+form div {
+    padding: 0.2em;
+    border-radius: 1em;
+    margin-top: 1em;
+}
+#kirjautumisSivu {
+    background-color: #f8f9fb;
+    border: 1px solid #e1e2e4;
+}
