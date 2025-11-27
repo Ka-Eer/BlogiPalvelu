@@ -82,9 +82,6 @@
             const likes = Number(data.Tykkaykset || 0);
             const content = data.Teksti || '';
             const imgSrc = data.Kuvasrc || null;
-
-            // tagit vastaavat BT1..BT11
-            const tagLabels = ['Pelit','Matkustaminen','Teknologia & Internet','Oppiminen & Itsekehitys','Ruoka & Juoma','Hyvinvointi & Elämäntyyli','Luovuus & Kulttuuri','Työ & Ura','Koti & Arki','Tee se itse & Projektit','Ympäristö & Luonto'];
             
             // RAKENTAA HTML:n
             let html = '';
@@ -100,11 +97,10 @@
             html += '<h2 class="">' + title + '</h2>';
             // renderöidään tagit Bootstrap badgeina
             let tagsHtml = '';
-            for (let i = 0; i < tagLabels.length; i++) { // käy läpi tagit
-                const key = 'BT' + (i + 1);
-                if (data[key]) {
-                    tagsHtml += '<span class="badge bg-primary me-1">' + escapeHtml(tagLabels[i]) + '</span>';
-                }
+            if (Array.isArray(data.Tagit) && data.Tagit.length > 0) {
+                data.Tagit.forEach(tag => {
+                    tagsHtml += '<span class="badge badge-tag-' + escapeHtml(tag.tag_ID) + ' me-1">' + escapeHtml(tag.tag_Nimi) + '</span>';
+                });
             }
             if (tagsHtml) { // jos on tageja, renderöidään ne
                 html += '<div class="mb-2">' + tagsHtml + '</div>';

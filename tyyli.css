@@ -211,3 +211,17 @@
     margin-bottom: 20px;
     }
 }
+
+/* Uniikit värit tageille badge-luokilla, id:n mukaan - lisätty .badge spesifisyyttä varten */
+.badge.badge-tag-1 { background-color: #6f42c1 !important; color: #fff !important; } /* Pelit */
+.badge.badge-tag-2 { background-color: #0d6efd !important; color: #fff !important; } /* Matkustaminen */
+.badge.badge-tag-3 { background-color: #20c997 !important; color: #fff !important; } /* Teknologia & internet */
+.badge.badge-tag-4 { background-color: #fd7e14 !important; color: #fff !important; } /* Oppiminen & Itsekehitys */
+.badge.badge-tag-5 { background-color: #dc3545 !important; color: #fff !important; } /* Ruoka & Juoma */
+.badge.badge-tag-6 { background-color: #198754 !important; color: #fff !important; } /* Hyvinvointi & Elämäntyyli */
+.badge.badge-tag-7 { background-color: #ffc107 !important; color: #212529 !important; } /* Luovuus & Kulttuuri */
+.badge.badge-tag-8 { background-color: #6610f2 !important; color: #fff !important; } /* Työ & Ura */
+.badge.badge-tag-9 { background-color: #6c757d !important; color: #fff !important; } /* Koti & Arki */
+.badge.badge-tag-10 { background-color: #f46242 !important; color: #fff !important; } /* Tee se itse & Projektit */
+.badge.badge-tag-11 { background-color: #198754 !important; color: #fff !important; } /* Ympäristö & Luonto */
+.badge.badge-tag-12 { background-color: #343a40 !important; color: #fff !important; } /* Talous & Raha */

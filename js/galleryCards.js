@@ -53,6 +53,20 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
             const hr = document.createElement('hr');
             body.appendChild(hr);
 
+            // Tagit Bootstrap badgeina
+            if (Array.isArray(post.Tagit) && post.Tagit.length > 0) {
+                const tagWrap = document.createElement('div');
+                tagWrap.className = 'mb-2';
+                post.Tagit.forEach(tag => {
+                    const badge = document.createElement('span');
+                    badge.className = `badge badge-tag-${tag.tag_ID} me-1`;
+                    badge.textContent = tag.tag_Nimi;
+                    badge.setAttribute('data-tag-id', tag.tag_ID);
+                    tagWrap.appendChild(badge);
+                });
+                body.appendChild(tagWrap);
+            }
+
             //esikatselu teksti
             const text = document.createElement('p');
             text.className = 'card-text';
