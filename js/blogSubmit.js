@@ -37,7 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Lähetä lomake palvelimelle
         try {
             const fd = new FormData(form);
-            const res = await fetch(form.action || 'blog_send.php', { //blog_send.php
+            // Kerää valitut tagit (checkboxit, joiden nimi alkaa blogTag)
+            const tagChecks = form.querySelectorAll('input[type="checkbox"][name^="blogTag"]:checked');
+            // Lisää tagit FormDataan taulukoksi 'tags[]'
+            tagChecks.forEach(cb => {
+                // Oletetaan että id on muotoa blogTagN, jolloin N = tag_ID
+                const match = cb.name.match(/^blogTag(\d+)$/);
+                if (match) {
+                    fd.append('tags[]', match[1]);
+                }
+            });
+            const res = await fetch(form.action || 'blog_send.php', {
                 method: 'POST',
                 body: fd
             });

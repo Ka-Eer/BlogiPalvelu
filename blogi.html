@@ -43,66 +43,68 @@
         <input class="form-control" type="file" accept="image/*" name="blogImg" id="blogImg">
         <div class="form-text">Maksimikoko: 15 MB.</div>
         <div class="form-control" id="checkBoxForm">
-            <div class="container-fluid row blogiTagContainer">
-                <label class="form-label">Valitse tagit (Valinnainen)</label>
-                <div class="col container-fluid">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag1" id="blogTag1" value="1">
-                        <label class="form-check-label" for="blogTag1">Pelit</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag2" id="blogTag2" value="1">
-                        <label class="form-check-label" for="blogTag2">Matkustaminen</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag3" id="blogTag3" value="1">
-                        <label class="form-check-label" for="blogTag3">Teknologia & Internet</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag4" id="blogTag4" value="1">
-                        <label class="form-check-label" for="blogTag4">Oppiminen & Itsekehitys</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag5" id="blogTag5" value="1">
-                        <label class="form-check-label" for="blogTag5">Ruoka & Juoma</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag6" id="blogTag6" value="1">
-                        <label class="form-check-label" for="blogTag6">Hyvinvointi & Elämäntyyli</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag7" id="blogTag7" value="1">
-                        <label class="form-check-label" for="blogTag7">Luovuus & Kulttuuri</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag8" id="blogTag8" value="1">
-                        <label class="form-check-label" for="blogTag8">Työ & Ura</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag9" id="blogTag9" value="1">
-                        <label class="form-check-label" for="blogTag9">Koti & Arki</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag10" id="blogTag10" value="1">
-                        <label class="form-check-label" for="blogTag10">Tee se itse & Projektit</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag11" id="blogTag11" value="1">
-                        <label class="form-check-label" for="blogTag11">Ympäristö & Luonto</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name = "blogTag12" id="blogTag12" value="1">
-                        <label class="form-check-label" for="blogTag12">Talous & Raha</label>
-                    </div>
-                </div>
+            <label class="form-label mb-3">Valitse tagit (Valinnainen)</label>
+            <div class="blogiTagContainer">
+                <!-- Piilotetut checkboxit formia varten -->
+                <input type="checkbox" name="blogTag1" id="blogTag1" value="1" style="display:none">
+                <input type="checkbox" name="blogTag2" id="blogTag2" value="1" style="display:none">
+                <input type="checkbox" name="blogTag3" id="blogTag3" value="1" style="display:none">
+                <input type="checkbox" name="blogTag4" id="blogTag4" value="1" style="display:none">
+                <input type="checkbox" name="blogTag5" id="blogTag5" value="1" style="display:none">
+                <input type="checkbox" name="blogTag6" id="blogTag6" value="1" style="display:none">
+                <input type="checkbox" name="blogTag7" id="blogTag7" value="1" style="display:none">
+                <input type="checkbox" name="blogTag8" id="blogTag8" value="1" style="display:none">
+                <input type="checkbox" name="blogTag9" id="blogTag9" value="1" style="display:none">
+                <input type="checkbox" name="blogTag10" id="blogTag10" value="1" style="display:none">
+                <input type="checkbox" name="blogTag11" id="blogTag11" value="1" style="display:none">
+                <input type="checkbox" name="blogTag12" id="blogTag12" value="1" style="display:none">
+                
+                <!-- Näkyvät badge-painikkeet -->
+                <span class="badge badge-tag-1 tag-badge" data-tag="1" role="button" tabindex="0">Pelit</span>
+                <span class="badge badge-tag-2 tag-badge" data-tag="2" role="button" tabindex="0">Matkustaminen</span>
+                <span class="badge badge-tag-3 tag-badge" data-tag="3" role="button" tabindex="0">Teknologia & Internet</span>
+                <span class="badge badge-tag-4 tag-badge" data-tag="4" role="button" tabindex="0">Oppiminen & Itsekehitys</span>
+                <span class="badge badge-tag-5 tag-badge" data-tag="5" role="button" tabindex="0">Ruoka & Juoma</span>
+                <span class="badge badge-tag-6 tag-badge" data-tag="6" role="button" tabindex="0">Hyvinvointi & Elämäntyyli</span>
+                <span class="badge badge-tag-7 tag-badge" data-tag="7" role="button" tabindex="0">Luovuus & Kulttuuri</span>
+                <span class="badge badge-tag-8 tag-badge" data-tag="8" role="button" tabindex="0">Työ & Ura</span>
+                <span class="badge badge-tag-9 tag-badge" data-tag="9" role="button" tabindex="0">Koti & Arki</span>
+                <span class="badge badge-tag-10 tag-badge" data-tag="10" role="button" tabindex="0">Tee se itse & Projektit</span>
+                <span class="badge badge-tag-11 tag-badge" data-tag="11" role="button" tabindex="0">Ympäristö & Luonto</span>
+                <span class="badge badge-tag-12 tag-badge" data-tag="12" role="button" tabindex="0">Talous & Raha</span>
             </div>
         </div>
+        
+        <script>
+        // Tag badge -toiminnallisuus
+        document.addEventListener('DOMContentLoaded', function() {
+            const tagBadges = document.querySelectorAll('.tag-badge');
+            
+            tagBadges.forEach(badge => {
+                // Click-käsittelijä
+                badge.addEventListener('click', function() {
+                    toggleTag(this);
+                });
+                
+                // Näppäimistötuki
+                badge.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleTag(this);
+                    }
+                });
+            });
+            
+            function toggleTag(badge) {
+                const tagId = badge.getAttribute('data-tag');
+                const checkbox = document.getElementById('blogTag' + tagId);
+                
+                // Vaihda tila
+                badge.classList.toggle('selected');
+                checkbox.checked = badge.classList.contains('selected');
+            }
+        });
+        </script>
 
 
         <div id="fileError" class="text-danger small" style="display:none; margin-top:6px;"></div>
