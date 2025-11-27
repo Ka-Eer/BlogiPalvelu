@@ -8,7 +8,7 @@ try {
     // MySQL yhdistäminen
     // Oletus XAMPP MySQL asetukset:
     $dbHost = '127.0.0.1';
-    $dbName = 'blogitekstit';//Tietokannan nimi josta haetaan; $dbName = 'blogitekstit';
+    $dbName = 'blogipalvelu_db';
     $dbUser = 'root';
     $dbPass = '';
     $dsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
@@ -20,7 +20,7 @@ try {
     ]);
 
     // Hakee galleriaan tiedot tietokannan taulusta blogit
-    $sql = 'SELECT ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY ID ASC';
+    $sql = 'SELECT blog_ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY blog_ID ASC';
     $stmt = $pdo->query($sql);
     $rows = []; //taulukko tuloksille
     while ($r = $stmt->fetch()) { // käy läpi rivit
@@ -50,6 +50,10 @@ try {
         } else {
             // jos ei kuvaa, null
             $r['Kuvasrc'] = null;
+        }
+        // Muuta ID -> blog_ID myös JSON:iin
+        if (isset($r['blog_ID'])) {
+            $r['ID'] = $r['blog_ID'];
         }
         $rows[] = $r; //tiedot lisätään taulukkoon
     }

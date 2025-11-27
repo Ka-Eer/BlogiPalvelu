@@ -8,7 +8,7 @@ try {
     // MySQL yhdistäminen
     // oletus XAMPP MySQL asetukset:
     $dbHost = '127.0.0.1';
-    $dbName = 'blogitekstit'; // Tietokannan nimi josta haetaan
+    $dbName = 'blogipalvelu_db'; // Tietokannan nimi josta haetaan
     $dbUser = 'root';
     $dbPass = '';
     $dsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
@@ -36,7 +36,7 @@ try {
     }
 
     // Hakee yhden postauksen taulusta blogit id:n perusteella
-    $sql = 'SELECT ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset, BT1, BT2, BT3, BT4, BT5, BT6, BT7, BT8, BT9, BT10, BT11 FROM blogit WHERE ID = ? LIMIT 1';
+    $sql = 'SELECT blog_ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset, BT1, BT2, BT3, BT4, BT5, BT6, BT7, BT8, BT9, BT10, BT11, BT12 FROM blogit WHERE blog_ID = ? LIMIT 1';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     $row = $stmt->fetch(); // rivi muuttuja fetchatusta tuloksesta
@@ -78,6 +78,10 @@ try {
 
     // Tykkäykset kokonaislukuna
     $row['Tykkaykset'] = isset($row['Tykkaykset']) ? (int)$row['Tykkaykset'] : 0;
+    // Muuta ID -> blog_ID myös JSON:iin
+    if (isset($row['blog_ID'])) {
+        $row['ID'] = $row['blog_ID'];
+    }
 
     // Palauttaa JSON datan muuttujasta $row
     echo json_encode($row, JSON_UNESCAPED_UNICODE);

@@ -7,7 +7,7 @@ try {
     // MySQL yhdistäminen
     // oletus XAMPP MySQL asetukset:
     $dbHost = '127.0.0.1';
-    $dbName = 'blogitekstit';
+    $dbName = 'blogipalvelu_db';
     $dbUser = 'root';
     $dbPass = '';
     $dsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
@@ -19,7 +19,7 @@ try {
     ]);
 
     // hakee uusimmat 8 postausta taulusta blogit päivämäärän ja ajan mukaan; ORDER BY Pvm DESC, Klo DESC LIMIT 8
-    $sql = 'SELECT ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY Pvm DESC, Klo DESC LIMIT 8';
+    $sql = 'SELECT blog_ID, Pvm, Klo, Otsikko, Teksti, Kuva, Tykkaykset FROM blogit ORDER BY Pvm DESC, Klo DESC LIMIT 8';
     $stmt = $pdo->query($sql);
     $rows = [];//taulukko tuloksille
     while ($r = $stmt->fetch()) {   // käy läpi rivit
@@ -53,6 +53,10 @@ try {
 
         // Tykkäykset kokonaislukuna
         $r['Tykkaykset'] = isset($r['Tykkaykset']) ? (int)$r['Tykkaykset'] : 0;
+        // Muuta ID -> blog_ID myös JSON:iin
+        if (isset($r['blog_ID'])) {
+            $r['ID'] = $r['blog_ID'];
+        }
 
         $rows[] = $r; // tiedot lisätään taulukkoon
     }

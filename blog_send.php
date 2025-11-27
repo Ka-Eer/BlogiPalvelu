@@ -8,7 +8,7 @@ try {
     //oletus XAMPP MySQL asetukset:
     $dbHost = '127.0.0.1';
     //Tietokannan nimi josta haetaan; $dbName = 'blogitekstit';
-    $dbName = 'blogitekstit';
+    $dbName = 'blogipalvelu_db';
     $dbUser = 'root';
     $dbPass = '';
     $dsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
@@ -115,7 +115,7 @@ try {
         @chmod($targetPath, 0644);
 
         // päivitä tietokantarivi kuvan polulla
-        $updateSql = 'UPDATE blogit SET Kuva = :kuva WHERE ID = :id';
+        $updateSql = 'UPDATE blogit SET Kuva = :kuva WHERE blog_ID = :id';
         $updateStmt = $pdo->prepare($updateSql);
         $updateStmt->execute([':kuva' => $targetRel, ':id' => $insertId]);
         $uploadedPath = $targetRel;

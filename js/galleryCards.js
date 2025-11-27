@@ -65,7 +65,7 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
             const read = document.createElement('a');
             read.className = 'btn btn-primary';
             // linkki tarkemmalle blogisivulle (blogit.html?id=ID)
-            read.href = 'blogit.html?id=' + encodeURIComponent(post.ID);
+            read.href = 'blogit.html?id=' + encodeURIComponent(post.blog_ID || post.ID);
             read.textContent = 'Lue lisää';
             body.appendChild(read);
 
@@ -88,7 +88,7 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
             btn.className = 'heart-button';
             btn.setAttribute('aria-pressed', 'false');
             btn.setAttribute('title', 'Tykkää');
-            btn.setAttribute('data-id', String(post.ID));
+            btn.setAttribute('data-id', String(post.blog_ID || post.ID));
             btn.setAttribute('aria-label', 'Tykkää');
 
             // lisää sydänkuvake
@@ -97,7 +97,7 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
             // tykkäyslaskuri
             const likeCount = document.createElement('span');
             likeCount.className = 'like-count';
-            likeCount.id = 'likes-' + post.ID;
+            likeCount.id = 'likes-' + (post.blog_ID || post.ID);
             likeCount.textContent = String(post.Tykkaykset || 0);
 
             likeWrap.appendChild(btn);

@@ -33,7 +33,7 @@ async function loadTopLikes() {
 
         // renderöi item
         function renderItem(item) {
-            const id = item.ID || item.id || '';
+            const id = item.blog_ID || item.ID || item.id || '';
             const title = item.Otsikko || item.otsikko || 'Ilman otsikkoa';
             const likes = typeof item.Tykkaykset === 'number' ? item.Tykkaykset : (parseInt(item.Tykkaykset) || 0);
 
