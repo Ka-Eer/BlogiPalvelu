@@ -1,4 +1,16 @@
 
+<?php
+$dbh = mysqli_connect('localhost', 'root', '', 'blogipalvelu_db');
+if (!$dbh) {
+ die("Unable to connect to MySQL: " . mysqli_connect_error());
+}
+
+$userName = $_POST['loginUserName'];
+$pass = $_POST['loginPass'];
+$sqlCheck = mysqli_query($dbh, "SELECT * FROM users");
+$sql = "INSERT INTO users (`kayttajaNimi`, `salasana`) VALUES ('$userName', '$pass')";
+
+?>
 
 <!DOCTYPE html>
 <html lang="fi">
@@ -34,21 +46,13 @@
             </div>
         </div>
     </nav>
-    <form method="post" action="login_send.php">
-        <div class="container container-fluid" id="kirjautumisSivu">
-            <div>
-                <label class="form-label" for="loginUserName">Käyttäjänimi</label>
-                <input class="form-control" name="loginUserName" id="loginUserName">
-            </div>
-            <div>
-                <label class="form-label" for="loginPass">Salasana</label>
-                <input class="form-control" name="loginPass" id="loginPass" type="password">
-            </div>
-            <div>
-                <button class="btn btn-primary" type="submit">Kirjaudu</button>
-            </div>
-        </div>
-    </form>
+    <?php
+    if (mysqli_query($dbh, $sql)) {
+        echo "Käyttäjä luotu";
+        } else {
+            echo "Error: " . mysqli_error($dbh);
+        }
+    ?>
 
 
 </body>
