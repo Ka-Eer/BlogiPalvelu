@@ -8,7 +8,7 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
 
     // hakee tiedot palvelimelta
     try {
-        const res = await fetch('get_galleria.php');//kutsuu get_galleria.php
+    const res = await fetch('PHP/get_galleria.php');//kutsuu get_galleria.php
         if (!res.ok) throw new Error('Network response not ok');// tarkistaa että vastaus on ok
         const posts = await res.json();
 

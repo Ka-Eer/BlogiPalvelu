@@ -8,7 +8,7 @@ async function loadLatestPosts() { // lataa uusimmat blogipostaukset
 
     // hae blogipostaukset palvelimelta
     try {
-        const res = await fetch('get_latest.php');// kutsuu get_latest.php
+    const res = await fetch('PHP/get_latest.php');// kutsuu get_latest.php
         if (!res.ok) throw new Error('Network response not ok'); // tarkistaa että vastaus on ok
         const posts = await res.json();
 

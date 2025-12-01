@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     fd.append('tags[]', match[1]);
                 }
             });
-            const res = await fetch(form.action || 'blog_send.php', {
+            const res = await fetch(form.action || 'PHP/blog_send.php', {
                 method: 'POST',
                 body: fd
             });

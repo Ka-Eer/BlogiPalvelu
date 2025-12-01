@@ -7,7 +7,7 @@ async function loadTopLikes() {
 
     // hakee tiedot palvelimelta
     try {
-        const resp = await fetch('get_top_likes.php'); // kutsuu get_top_likes.php
+    const resp = await fetch('PHP/get_top_likes.php'); // kutsuu get_top_likes.php
         if (!resp.ok) throw new Error('Network response was not ok'); //tarkistaa että vastaus on ok
         const data = await resp.json();
 
