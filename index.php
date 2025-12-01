@@ -14,8 +14,8 @@ $_SESSION['user_ID'] = 2;
 $pages = [
     '' => 'index.html',
     'index' => 'index.html',
-    'blogi' => 'blogi.html',
-    'blogit' => 'blogit.html',
+    'blogi' => 'luo_blogi.html',
+    'blogit' => 'blogi.html',
     'galleria' => 'galleria.html',
 ];
 

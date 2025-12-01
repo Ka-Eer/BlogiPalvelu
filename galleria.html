@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="index.html">Etusivu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="blogi.html">Blogi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="luo_blogi.html">Luo blogi</a></li>
                     <li class="nav-item"><a class="nav-link active" href="galleria.html">Galleria</a></li>
                     <li class="nav-item"><a class="nav-link" href="login.html">Kirjaudu sisään</a></li>
                 </ul>
@@ -182,7 +182,7 @@
         modalLikeCount.setAttribute('data-blog-id', String(post.ID));
         
         // Aseta "Avaa blogi" -linkki
-        document.getElementById('modalOpenBlogLink').href = 'blogit.html?id=' + encodeURIComponent(post.ID);
+        document.getElementById('modalOpenBlogLink').href = 'blogi.html?id=' + encodeURIComponent(post.ID);
         
         // Poista vanhat event listenerit kloonaamalla
         const newModalHeartBtn = modalHeartBtn.cloneNode(true);
