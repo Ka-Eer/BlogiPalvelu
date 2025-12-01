@@ -61,7 +61,7 @@
     }
 
     // Hakee postauksen tiedot palvelimelta
-    fetch('get_post.php?id=' + encodeURIComponent(id))
+    fetch('PHP/get_post.php?id=' + encodeURIComponent(id))
         .then(resp => {// tarkistaa vastauksen
             if (!resp.ok) { //jos ei ok, heittää virheen
                 if (resp.status === 404) throw new Error('Postausta ei löydy');
