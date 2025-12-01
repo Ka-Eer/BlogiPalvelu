@@ -26,6 +26,10 @@
     font-size: 8rem;
     font-weight: bold;
 }
+/*Tekstien fontti*/
+#Style {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
 
 /* Content section layout */
 .content-section {

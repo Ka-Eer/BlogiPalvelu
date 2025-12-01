@@ -32,3 +32,7 @@ form div {
     background-color: #f8f9fb;
     border: 1px solid #e1e2e4;
 }
+/*Tekstien fontti*/
+#Style {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}

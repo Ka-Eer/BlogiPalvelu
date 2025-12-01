@@ -25,6 +25,10 @@
     font-size: 8rem;
     font-weight: bold;
 }
+/*Tekstien fontti*/
+#Style {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
 /*Blogi kortit*/
 .content-section {
     padding: 20px;
