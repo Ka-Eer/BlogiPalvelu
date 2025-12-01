@@ -29,10 +29,41 @@
 #Style {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
+/*Teeman vaihto*/
+#themeToggle {
+    margin-right: 20px;
+}
+/*LIGHT THEME (default)*/
+body {
+    background-color: #ffffff;
+    color: #000000;
+}
+/*DARK THEME*/
+.dark-theme {
+    background-color: #1b1b1b !important;
+    color: #e4e4e4 !important;
+}
+/*Korjaa taustat tummassa tilassa*/
+.dark-theme .navbar {
+    background-color: #1f1f1f !important;
+}
+.dark-theme .suositut {
+    background-color: rgb(75, 75, 75);
+    color: #ffffff;
+}
+.dark-theme .modal-content {
+    background-color: #1f1f1f;
+    color: #e4e4e4;
+}
+.dark-theme .card {
+    background-color: #1d1d1d;
+    color: #ffffff;
+}
+
 /*Blogi kortit*/
 .content-section {
     padding: 20px;
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #e2e2e2;
 }
 .card {
     margin-bottom: 20px;
@@ -58,7 +89,7 @@
 
 
 .suositut {
-    background-color: #f8f9fa;
+    background-color: #e4e4e4;
     padding: 20px;
     border-radius: 10px;
 }
