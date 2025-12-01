@@ -1,4 +1,8 @@
-
+﻿<?php
+session_start();
+$isLoggedIn = isset($_SESSION['user_ID']);
+$username = $_SESSION['username'] ?? '';
+?>
 
 <!DOCTYPE html>
 <html lang="fi">
@@ -20,21 +24,33 @@
     <!--Navbar-->
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.html"><img src="Kuvat/Home.png" alt="Home" class="rounded-circle" width="48" height="48"></a>
+            <a class="navbar-brand" href="index.php">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Etusivu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="luo_blogi.html">Luo blogi</a></li>
-                    <li class="nav-item"><a class="nav-link" href="galleria.html">Galleria</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="login.html">Kirjaudu sisään</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php">Etusivu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="luo_blogi.php">Luo blogi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="galleria.php">Galleria</a></li>
                 </ul>
                 <!--Teeman vaihto nappi-->
                 <button id="themeToggle" class="btn btn-outline-light ms-3">
                     Dark / Light
                 </button>
+                <!--Kirjautuminen / Käyttäjävalikko-->
+                <?php if ($isLoggedIn): ?>
+                    <div class="dropdown ms-3">
+                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <?php echo htmlspecialchars($username); ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="PHP/logout.php">Kirjaudu ulos</a></li>
+                        </ul>
+                    </div>
+                <?php else: ?>
+                    <a href="login.php" class="btn btn-outline-light ms-3">Kirjaudu sisään</a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
@@ -52,7 +68,7 @@
                 <button class="btn btn-primary" type="submit">Kirjaudu</button>
             </div>
             <div class="mt-3">
-                <a href="register.html" class="btn btn-link">Luo uusi käyttäjä</a>
+                <a href="register.php" class="btn btn-link">Luo uusi käyttäjä</a>
             </div>
         </div>
     </form>

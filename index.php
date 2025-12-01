@@ -1,36 +1,212 @@
 <?php
-// Simuloidaan kirjautunutta käyttäjää (user_ID = 2)
 session_start();
-// Nollaa vanha sessio ja aseta uusi user_ID
-$_SESSION = array(); // Tyhjennä kaikki vanhat session-muuttujat
-$_SESSION['user_ID'] = 2;
+$isLoggedIn = isset($_SESSION['user_ID']);
+$username = $_SESSION['username'] ?? '';
+?>
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogi</title>
+    <!--Bootstrap linkit-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+    <link rel="stylesheet" href="tyyli.css">
+</head>
+<body id="Style">
+    <!--Otsikko-->
+    <header class="Otsikko1">
+        <h1>Blogi</h1>
+    </header>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.php">Etusivu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="luo_blogi.php">Luo blogi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="galleria.php">Galleria</a></li>
+                </ul>
+                <!--Teeman vaihto nappi-->
+                <button id="themeToggle" class="btn btn-outline-light ms-3">
+                    Dark / Light
+                </button>
+                <!--Hakukenttä-->
+                <form class="d-flex" role="search">
+                    <input id="searchInput" class="form-control me-2" type="search" placeholder="Hae..." aria-label="Search">
+                </form>
+                <!--Kirjautuminen / Käyttäjävalikko-->
+                <?php if ($isLoggedIn): ?>
+                    <div class="dropdown ms-3">
+                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <?php echo htmlspecialchars($username); ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="PHP/logout.php">Kirjaudu ulos</a></li>
+                        </ul>
+                    </div>
+                <?php else: ?>
+                    <a href="login.php" class="btn btn-outline-light ms-3">Kirjaudu sisään</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </nav>
+    <!--Sisältö-->
+    <div class="container-fluid content-section">
+        <div class="row g-4">
+            <!-- Uusimmat blogit lista -->
+            <div class="col-12 col-lg-8">
+                <h4>Uusimmat blogit</h4>
+                 <!-- latestPosts.js täyttää tämän osion 8 uusimmalla kortilla -->
+                <div id="latest-row" class="row">
+                    <!-- cards inserted here by js/latestPosts.js -->
+                </div>
+                <div id="noResults" class="no-results" style="display:none">Ei löytynyt blogeja.</div>
+            </div>
+            <!--Suosituimmat blogit lista-->
+            <div class="col-12 col-lg-4">
+                <div class="suositut ps-lg-4">
+                    <h4>Suosituimmat blogit</h4>
+                    <ul id="top-list">
+                        <!--Suositut lista päivittyy blogien tykkäysten mukaan (täytetään JavaScriptillä)-->
+                        <li>Ladataan suosituimpia...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
-// php tuo html sivut palvelimelle
+    <!-- Bootstrap Modal blogipostaukselle -->
+    <div class="modal fade" id="blogModal" tabindex="-1" aria-labelledby="blogModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="blogModalLabel">Blogipostaus</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sulje"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Kuva" class="img-fluid mb-3" style="width: 100%; max-height: 500px; object-fit: contain;">
+                    <h4 id="modalTitle"></h4>
+                    <hr>
+                    <div id="modalTagit" class="mb-2"></div>
+                    <p id="modalText" style="white-space: pre-wrap;"></p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small id="modalDate" class="text-muted"></small>
+                        <span class="like-btn">
+                            <button class="heart-button" id="modalHeartButton" aria-pressed="false" title="Tykkää" data-id="" aria-label="Tykkää">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </button>
+                            <span class="like-count" id="modalLikeCount">0</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sulje</button>
+                    <a id="modalOpenBlogLink" href="#" class="btn btn-primary">Avaa blogi</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-// XAMPP Apache palvelin
-// C:\xampp\htdocs kansion sisältö korvattu GitHub repo sisällöllä
+    <!-- Scriptit -->
+    <script>
+    // Uusi hakutoiminto
+    document.getElementById("searchInput").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const query = encodeURIComponent(this.value.trim());
+            if (query.length > 0) {
+                window.location.href = "galleria.php?search=" + query;
+            }
+        }
+    });
 
-$pages = [
-    '' => 'index.html',
-    'index' => 'index.html',
-    'blogi' => 'luo_blogi.html',
-    'blogit' => 'blogi.html',
-    'galleria' => 'galleria.html',
-];
-
-$req = isset($_GET['page']) ? (string) $_GET['page'] : '';
-
-if (array_key_exists($req, $pages)) {
-    $file = __DIR__ . DIRECTORY_SEPARATOR . $pages[$req];
-    if (is_readable($file)) {
-        header('Content-Type: text/html; charset=utf-8');
-        // välttää tiedoston lataaminen kokonaan muistiin ennen lähettämistä
-        readfile($file);
-        exit;
-    } else {    // tiedostoa ei löydy
-        http_response_code(404);
-        echo "<h1>404 Not Found</h1><p>File not found: " . htmlspecialchars($pages[$req]) . "</p>";
-        exit;
+    //Teeman vaihto ominaisuus
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-theme");
     }
-}
+    document.getElementById("themeToggle").addEventListener("click", () => {
+        document.body.classList.toggle("dark-theme");
+        //Tallentaa käyttäjän valitseman teeman
+        if (document.body.classList.contains("dark-theme")) {
+            localStorage.setItem("theme", "dark");
+        } else {
+            localStorage.setItem("theme", "light");
+        }
+    });
+
+    // Funktio modalin avaamiseen blogidatalla
+    function openBlogModal(post) {
+        document.getElementById('modalTitle').textContent = post.Otsikko || '';
+        document.getElementById('modalText').textContent = post.Teksti || '';
+        document.getElementById('modalImage').src = post.Kuvasrc || 'Kuvat/Placeholder2.png';
+        
+        // Lisää tagit modaliin
+        const modalTagit = document.getElementById('modalTagit');
+        modalTagit.innerHTML = '';
+        if (Array.isArray(post.Tagit) && post.Tagit.length > 0) {
+            post.Tagit.forEach(tag => {
+                const badge = document.createElement('span');
+                badge.className = `badge badge-tag-${tag.tag_ID} me-1`;
+                badge.textContent = tag.tag_Nimi;
+                modalTagit.appendChild(badge);
+            });
+        }
+        
+        const timeOnly = post.Klo ? post.Klo.slice(0, 5) : '';
+        document.getElementById('modalDate').textContent = post.Pvm + ' ' + timeOnly;
+        
+        const modalHeartBtn = document.getElementById('modalHeartButton');
+        modalHeartBtn.setAttribute('data-id', String(post.ID));
+        
+        // Aseta liked-tila modalin napille (tarkista ensin kortin napista nykyinen tila)
+        const cardBtn = document.querySelector(`.blog-card [data-id="${post.ID}"]`);
+        const currentLiked = cardBtn ? cardBtn.classList.contains('liked') : (post.liked || false);
+        
+        if (currentLiked) {
+            modalHeartBtn.classList.add('liked');
+        } else {
+            modalHeartBtn.classList.remove('liked');
+        }
+        modalHeartBtn.setAttribute('aria-pressed', currentLiked ? 'true' : 'false');
+        modalHeartBtn.title = currentLiked ? 'Poista tykkäys' : 'Tykkää';
+        
+        const modalLikeCount = document.getElementById('modalLikeCount');
+        // Hae nykyinen laskuri kortista jos mahdollista
+        const cardCountEl = document.querySelector(`[data-blog-id="${post.ID}"].like-count`);
+        const currentCount = cardCountEl ? cardCountEl.textContent : String(post.Tykkaykset || 0);
+        modalLikeCount.textContent = currentCount;
+        modalLikeCount.setAttribute('data-blog-id', String(post.ID));
+        
+        // Aseta "Avaa blogi" -linkki
+        document.getElementById('modalOpenBlogLink').href = 'blogi.php?id=' + encodeURIComponent(post.ID);
+        
+        // Poista vanhat event listenerit kloonaamalla
+        const newModalHeartBtn = modalHeartBtn.cloneNode(true);
+        modalHeartBtn.parentNode.replaceChild(newModalHeartBtn, modalHeartBtn);
+        
+        // Lisää AJAX-pohjainen event listener modalin tykkäysnappiin
+        newModalHeartBtn.onclick = (e) => {
+            e.preventDefault();
+            if (typeof toggleLike === 'function') {
+                toggleLike(newModalHeartBtn);
+            }
+        };
+        
+        // Avaa modal
+        const modalElement = document.getElementById('blogModal');
+        const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+        modal.show();
+    }
+</script>
+    <script src="js/latestPosts.js" defer></script>
+    <script src="js/topLikes.js" defer></script>
+</body>
+</html>

@@ -62,7 +62,7 @@ async function loadLatestPosts() { // lataa uusimmat blogipostaukset
             body.appendChild(text);
             const read = document.createElement('a');
             read.className = 'btn btn-primary';
-            read.href = 'blogi.html?id=' + encodeURIComponent(post.blog_ID || post.ID);
+            read.href = 'blogi.php?id=' + encodeURIComponent(post.blog_ID || post.ID);
             read.textContent = 'Lue lisää';
             body.appendChild(read);
             const meta = document.createElement('div');
