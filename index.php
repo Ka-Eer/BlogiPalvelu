@@ -1,4 +1,11 @@
 <?php
+// Simuloidaan kirjautunutta käyttäjää (user_ID = 2)
+session_start();
+// Nollaa vanha sessio ja aseta uusi user_ID
+$_SESSION = array(); // Tyhjennä kaikki vanhat session-muuttujat
+$_SESSION['user_ID'] = 2;
+
+
 // php tuo html sivut palvelimelle
 
 // XAMPP Apache palvelin
