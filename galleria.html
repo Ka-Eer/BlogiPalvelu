@@ -162,10 +162,24 @@
         const modalHeartBtn = document.getElementById('modalHeartButton');
         modalHeartBtn.setAttribute('data-id', String(post.ID));
         
+        // Aseta liked-tila modalin napille (tarkista ensin kortin napista nykyinen tila)
+        const cardBtn = document.querySelector(`.gallery-card [data-id="${post.ID}"]`);
+        const currentLiked = cardBtn ? cardBtn.classList.contains('liked') : (post.liked || false);
+        
+        if (currentLiked) {
+            modalHeartBtn.classList.add('liked');
+        } else {
+            modalHeartBtn.classList.remove('liked');
+        }
+        modalHeartBtn.setAttribute('aria-pressed', currentLiked ? 'true' : 'false');
+        modalHeartBtn.title = currentLiked ? 'Poista tykkäys' : 'Tykkää';
+        
         const modalLikeCount = document.getElementById('modalLikeCount');
-        modalLikeCount.textContent = String(post.Tykkaykset || 0);
-        // Aseta ID uudelleen joka kerta kun modal avataan
-        modalLikeCount.id = 'likes-' + post.ID;
+        // Hae nykyinen laskuri kortista jos mahdollista
+        const cardCountEl = document.querySelector(`[data-blog-id="${post.ID}"].like-count`);
+        const currentCount = cardCountEl ? cardCountEl.textContent : String(post.Tykkaykset || 0);
+        modalLikeCount.textContent = currentCount;
+        modalLikeCount.setAttribute('data-blog-id', String(post.ID));
         
         // Aseta "Avaa blogi" -linkki
         document.getElementById('modalOpenBlogLink').href = 'blogit.html?id=' + encodeURIComponent(post.ID);
@@ -174,22 +188,18 @@
         const newModalHeartBtn = modalHeartBtn.cloneNode(true);
         modalHeartBtn.parentNode.replaceChild(newModalHeartBtn, modalHeartBtn);
         
-        // Lisää event listener modalin tykkäysnappiin
+        // Lisää AJAX-pohjainen event listener modalin tykkäysnappiin
         newModalHeartBtn.onclick = (e) => {
             e.preventDefault();
-            toggleLike(newModalHeartBtn);
+            if (typeof toggleLike === 'function') {
+                toggleLike(newModalHeartBtn);
+            }
         };
         
         // Avaa modal
         const modalElement = document.getElementById('blogModal');
         const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
         modal.show();
-        
-        // Palauta ID takaisin modalLikeCount:ksi kun modal suljetaan
-        modalElement.addEventListener('hidden.bs.modal', function resetId() {
-            modalLikeCount.id = 'modalLikeCount';
-            modalElement.removeEventListener('hidden.bs.modal', resetId);
-        });
     }
     </script>
 

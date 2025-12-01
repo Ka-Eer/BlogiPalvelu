@@ -2,6 +2,7 @@
 // get_post.php
 // palauttaa yhden blogipostauksen JSON-muodossa annettuun id:hen perustuen
 
+session_start();
 header('Content-Type: application/json; charset=utf-8');
 
 try {
@@ -87,6 +88,16 @@ try {
 	// Muuta ID -> blog_ID myös JSON:iin
 	if (isset($row['blog_ID'])) {
 		$row['ID'] = $row['blog_ID'];
+	}
+
+	// Onko käyttäjä tykännyt tästä blogista?
+	if (isset($_SESSION['user_ID'])) {
+		$user_ID = $_SESSION['user_ID'];
+		$likeCheck = $pdo->prepare('SELECT 1 FROM likes WHERE blog_ID = ? AND user_ID = ?');
+		$likeCheck->execute([$row['blog_ID'], $user_ID]);
+		$row['liked'] = $likeCheck->fetch() ? true : false;
+	} else {
+		$row['liked'] = false;
 	}
 
 	// Hae tagit tälle blogille (nimet ja id:t)

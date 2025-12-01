@@ -108,10 +108,11 @@
 
             // Likes renderöidään: sydän-painike + laskuri
             const postId = data.ID;
+            const liked = data.liked || false;
             let likeHtml = '';
             likeHtml += '<div class="d-flex align-items-center mb-3">';
             likeHtml += '<div class="me-2">';
-            likeHtml += '<button class="heart-button" data-id="' + escapeHtml(postId) + '" aria-pressed="false" title="Tykkää" aria-label="Tykkää">';
+            likeHtml += '<button class="heart-button' + (liked ? ' liked' : '') + '" data-id="' + escapeHtml(postId) + '" aria-pressed="' + (liked ? 'true' : 'false') + '" title="' + (liked ? 'Poista tykkäys' : 'Tykkää') + '" aria-label="Tykkää">';
             likeHtml += '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
             likeHtml += '</button>';
             likeHtml += '</div>';
@@ -129,23 +130,29 @@
             // asettaa HTML:n juureen
             root.innerHTML = html;
 
-            // Liitetään tykkäyspainikkeiden kuuntelijat
+            // AJAX-pohjainen toggleLike-funktio
             function toggleLike(button) {
-                const id = button.getAttribute('data-id');
-                const countEl = document.getElementById(`likes-${id}`);
-                if (!countEl) return;
-
-                const liked = button.classList.toggle('liked');
-
-                button.classList.add('pop');
-                setTimeout(() => button.classList.remove('pop'), 300);
-
-                let count = parseInt(countEl.textContent) || 0;
-                count = liked ? count + 1 : Math.max(0, count - 1);
-                countEl.textContent = count;
-
-                button.setAttribute('aria-pressed', liked ? 'true' : 'false');
-                button.title = liked ? 'Poista tykkäys' : 'Tykkää';
+                const blogId = button.getAttribute('data-id');
+                fetch('PHP/like_toggle.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: 'blog_ID=' + encodeURIComponent(blogId)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    button.classList.toggle('liked', data.liked);
+                    button.setAttribute('aria-pressed', data.liked ? 'true' : 'false');
+                    button.title = data.liked ? 'Poista tykkäys' : 'Tykkää';
+                    const countEl = document.getElementById('likes-' + blogId);
+                    if (countEl) countEl.textContent = data.count;
+                })
+                .catch(err => {
+                    console.error('Like toggle failed:', err);
+                });
             }
 
             const likeBtn = root.querySelector('.heart-button');

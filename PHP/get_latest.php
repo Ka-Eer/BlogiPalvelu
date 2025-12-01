@@ -1,6 +1,7 @@
 <?php // get_latest.php
 // hakee uusimmat 8 blogipostausta tietokannasta ja palauttaa JSON muodossa
 
+session_start();
 header('Content-Type: application/json; charset=utf-8');
 
 try {
@@ -58,9 +59,20 @@ try {
 
 		// Tykkäykset kokonaislukuna (nyt lasketaan likes-taulusta)
 		$r['Tykkaykset'] = (int)$r['Tykkaykset'];
+
 		// Muuta ID -> blog_ID myös JSON:iin
 		if (isset($r['blog_ID'])) {
 			$r['ID'] = $r['blog_ID'];
+		}
+
+		// Onko käyttäjä tykännyt tästä blogista?
+		if (isset($_SESSION['user_ID'])) {
+			$user_ID = $_SESSION['user_ID'];
+			$likeCheck = $pdo->prepare('SELECT 1 FROM likes WHERE blog_ID = ? AND user_ID = ?');
+			$likeCheck->execute([$r['blog_ID'], $user_ID]);
+			$r['liked'] = $likeCheck->fetch() ? true : false;
+		} else {
+			$r['liked'] = false;
 		}
 
 		// Hae tagit tälle blogille (nimet ja id:t)

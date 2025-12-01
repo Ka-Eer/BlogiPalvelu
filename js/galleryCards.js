@@ -95,34 +95,34 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
             body.appendChild(meta);
 
             //tykkäykset
-            const likeWrap = document.createElement('span');
-            likeWrap.className = 'like-btn';
-            // Luo tykkäysnappi
             const btn = document.createElement('button');
             btn.className = 'heart-button';
-            btn.setAttribute('aria-pressed', 'false');
-            btn.setAttribute('title', 'Tykkää');
+            btn.setAttribute('aria-pressed', post.liked ? 'true' : 'false');
+            btn.setAttribute('title', post.liked ? 'Poista tykkäys' : 'Tykkää');
             btn.setAttribute('data-id', String(post.blog_ID || post.ID));
             btn.setAttribute('aria-label', 'Tykkää');
+            if (post.liked) btn.classList.add('liked');
 
-            // lisää sydänkuvake
             btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
 
-            // tykkäyslaskuri
             const likeCount = document.createElement('span');
             likeCount.className = 'like-count';
+            likeCount.setAttribute('data-blog-id', String(post.blog_ID || post.ID));
             likeCount.id = 'likes-' + (post.blog_ID || post.ID);
             likeCount.textContent = String(post.Tykkaykset || 0);
 
-            likeWrap.appendChild(btn);
-            likeWrap.appendChild(likeCount);
-            
-            // lisää tykkäykset meta-taulukkoon (päivämäärän kanssa)
-            const likesSmall = document.createElement('small');
-            likesSmall.className = 'text-muted';
-            likesSmall.appendChild(likeWrap);
-            
-            // Etsi meta ja lisää like-span sinne
+            // AJAX event listeners
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleLike(btn);
+            });
+            btn.addEventListener('keydown', function(e) {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    toggleLike(btn);
+                }
+            });
+
             const metaLikes = document.createElement('span');
             metaLikes.appendChild(btn);
             metaLikes.appendChild(likeCount);
@@ -158,8 +158,6 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
             });
         });
 
-        // lisää tykkäysnapin kuuntelijat
-        attachLikeListeners();
 
     } catch (err) {
         console.error('Failed to load gallery:', err);
@@ -167,28 +165,33 @@ async function loadGalleryCards() { // lataa gallerian blogipostaukset
     }
 }
 
-// tykkäysnapin event listenerit
-function attachLikeListeners() {
-    document.querySelectorAll('.heart-button').forEach(btn => {
-        // välttää moninkertaiset event listenerit
-        if (btn.__hasLikeHandler) return;
-        btn.__hasLikeHandler = true;
-
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (typeof toggleLike === 'function') {
-                toggleLike(btn);
-            }
+// AJAX-pohjainen toggleLike-funktio
+function toggleLike(button) {
+    const blogId = button.getAttribute('data-id');
+    fetch('PHP/like_toggle.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'blog_ID=' + encodeURIComponent(blogId)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        // Päivitä KAIKKI tämän blogin tykkäysnapit (kortit + modaali)
+        document.querySelectorAll(`[data-id="${blogId}"]`).forEach(btn => {
+            btn.classList.toggle('liked', data.liked);
+            btn.setAttribute('aria-pressed', data.liked ? 'true' : 'false');
+            btn.title = data.liked ? 'Poista tykkäys' : 'Tykkää';
         });
-
-        btn.addEventListener('keydown', (e) => {
-            if (e.key === ' ' || e.key === 'Enter') {
-                e.preventDefault();
-                if (typeof toggleLike === 'function') {
-                    toggleLike(btn);
-                }
-            }
+        // Päivitä KAIKKI tämän blogin tykkäyslaskurit (sekä kortissa että modaalissa)
+        document.querySelectorAll(`[data-blog-id="${blogId}"].like-count`).forEach(countEl => {
+            countEl.textContent = data.count;
         });
+    })
+    .catch(err => {
+        console.error('Like toggle failed:', err);
     });
 }
 
