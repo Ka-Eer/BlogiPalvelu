@@ -35,14 +35,14 @@ try {
 	// Hae juuri luodun rivin ID
 	$insertId = $pdo->lastInsertId();
 
-	// Tallenna tagit blog_tag-liitostauluun: käydään kaikki tagit-taulun tag_ID:t läpi ja tarkistetaan löytyykö POSTista blogTagN
-	$tagStmt = $pdo->prepare('INSERT INTO blog_tag (blog_ID, tag_ID) VALUES (?, ?)');
-	$tagQuery = $pdo->query('SELECT tag_ID FROM tagit');
-	$allTags = $tagQuery->fetchAll(PDO::FETCH_COLUMN);
-	foreach ($allTags as $tagId) {
-		$key = 'blogTag' . $tagId;
-		if (!empty($_POST[$key])) {
-			$tagStmt->execute([$insertId, $tagId]);
+	// Tallenna tagit blog_tag-liitostauluun
+	if (!empty($_POST['tags']) && is_array($_POST['tags'])) {
+		$tagStmt = $pdo->prepare('INSERT INTO blog_tag (blog_ID, tag_ID) VALUES (?, ?)');
+		foreach ($_POST['tags'] as $tagId) {
+			// Varmista että tagId on numero
+			if (is_numeric($tagId)) {
+				$tagStmt->execute([$insertId, (int)$tagId]);
+			}
 		}
 	}
 

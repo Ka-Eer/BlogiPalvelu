@@ -23,7 +23,7 @@ $username = $_SESSION['username'] ?? '';
     <!--Navbar-->
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">Logo</a>
+            <a class="navbar-brand" href="index.php"><img src="Kuvat/Home.png" alt="Home" class="rounded-circle" width="48" height="48"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
