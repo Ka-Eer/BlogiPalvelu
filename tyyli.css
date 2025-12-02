@@ -148,19 +148,33 @@ body {
     color: #212529;
 }
 
-/* Hover/clickable styles for top-list items (suosituimmat) */
-.suositut ul li.top-item.clickable {
-    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
-    cursor: pointer;
+/* Top-item sisältö wrapper (otsikko + tagit) */
+.suositut ul li.top-item .top-item-content {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    flex: 1;
+    min-width: 0;
 }
-.suositut ul li.top-item.clickable:hover {
-    transform: translateX(4px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-    background-color: #f8f9fa;
+
+.suositut ul li.top-item .top-title {
+    display: inline-block;
+    color: #212529;
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
 }
-.suositut ul li.top-item.clickable:focus {
-    outline: 3px solid rgba(13,110,253,0.12);
-    outline-offset: 3px;
+
+/* Tagit näkyvissä aina */
+.suositut ul li.top-item .top-tags {
+    display: inline-flex;
+    gap: 0.25rem;
+    white-space: nowrap;
+    flex-shrink: 1;
 }
 
 /*Hakukenttä*/
