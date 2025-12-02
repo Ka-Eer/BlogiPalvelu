@@ -2,6 +2,7 @@
 // get_top_likes.php
 // Palauttaa JSON-muodossa 10 eniten tykättyä blogipostausta.
 
+session_start();
 header('Content-Type: application/json; charset=utf-8');
 
 try {
@@ -20,20 +21,68 @@ try {
 	]);
 
 	// Haetaan blogit ja lasketaan tykkäykset likes-taulusta
-	$sql = 'SELECT b.blog_ID, b.Otsikko, COUNT(l.user_ID) AS Tykkaykset
+	$sql = 'SELECT b.blog_ID, b.Pvm, b.Klo, b.Otsikko, b.Teksti, b.Kuva, COUNT(l.user_ID) AS Tykkaykset
 			FROM blogit b
 			LEFT JOIN likes l ON b.blog_ID = l.blog_ID
-			GROUP BY b.blog_ID, b.Otsikko
+			GROUP BY b.blog_ID, b.Pvm, b.Klo, b.Otsikko, b.Teksti, b.Kuva
 			ORDER BY Tykkaykset DESC, b.Pvm DESC, b.blog_ID DESC
 			LIMIT 10';
 	$stmt = $pdo->query($sql);
-	$rows = $stmt->fetchAll();
-	// Muuta ID -> blog_ID myös JSON:iin
-	foreach ($rows as &$r) {
+	$rows = [];
+	while ($r = $stmt->fetch()) {
+		// käsittelee Kuva-kentän
+		if (!empty($r['Kuva'])) { // jos Kuva-kenttä ei ole tyhjä
+			$k = $r['Kuva'];
+			if (is_string($k)) {
+				// Jos Kuva-kenttä on jo polku tai sisältää hakemiston erotin, käytä sellaisenaan
+				if (strpos($k, 'Kuvat/') === 0 || strpos($k, '/') !== false) {
+					// Jos polku ei ala '/', tee siitä juurirelatiivinen
+					if (strpos($k, '/') === 0) {
+						$r['Kuvasrc'] = $k;
+					} else {
+						$r['Kuvasrc'] = '/' . $k;
+					}
+				} elseif (preg_match('/^[0-9A-Za-z_\-\.]+\.[A-Za-z]{2,6}$/', $k) && strlen($k) < 512) {
+					// pelkkä tiedostonimi -> juurirelatiivinen polku
+					$r['Kuvasrc'] = '/Kuvat/' . $k;
+				} else {
+					// muu merkkijono, oletetaan binääri
+					$r['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
+				}
+			} else {
+				// ei-merkkijono, todennäköisesti BLOB 
+				$r['Kuvasrc'] = 'data:image/*;base64,' . base64_encode($k);
+			}
+		} else {
+			// jos ei kuvaa, null
+			$r['Kuvasrc'] = null;
+		}
+
+		// Tykkäykset kokonaislukuna
 		$r['Tykkaykset'] = (int)$r['Tykkaykset'];
+
+		// Muuta ID -> blog_ID myös JSON:iin
 		if (isset($r['blog_ID'])) {
 			$r['ID'] = $r['blog_ID'];
 		}
+
+		// Onko käyttäjä tykännyt tästä blogista?
+		if (isset($_SESSION['user_ID'])) {
+			$user_ID = $_SESSION['user_ID'];
+			$likeCheck = $pdo->prepare('SELECT 1 FROM likes WHERE blog_ID = ? AND user_ID = ?');
+			$likeCheck->execute([$r['blog_ID'], $user_ID]);
+			$r['liked'] = $likeCheck->fetch() ? true : false;
+		} else {
+			$r['liked'] = false;
+		}
+
+		// Hae tagit tälle blogille (nimet ja id:t)
+		$tagSql = 'SELECT t.tag_ID, t.tag_Nimi FROM blog_tag bt JOIN tagit t ON bt.tag_ID = t.tag_ID WHERE bt.blog_ID = ? ORDER BY t.tag_ID ASC';
+		$tagStmt = $pdo->prepare($tagSql);
+		$tagStmt->execute([$r['blog_ID']]);
+		$tags = $tagStmt->fetchAll();
+		$r['Tagit'] = $tags;
+		$rows[] = $r; // tiedot lisätään taulukkoon
 	}
 
 	// Palauttaa JSON datan muuttujasta $rows

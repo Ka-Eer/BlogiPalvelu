@@ -43,11 +43,29 @@ async function loadTopLikes() {
             // lista itemi näppäin fokusoitavaksi
             li.tabIndex = 0;
 
-            // Otsikko linkkinä
-            const a = document.createElement('a');
-            // linkki tarkemmalle blogisivulle (blogi.php?id=ID)
-            a.href = `blogi.php?id=${encodeURIComponent(id)}`;
-            a.textContent = title;
+            // Kontti otsikolla ja tageilla
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'top-item-content';
+
+            // Otsikko (ei linkkinä, vaan klikattava teksti)
+            const titleSpan = document.createElement('span');
+            titleSpan.className = 'top-title';
+            titleSpan.textContent = title;
+            contentWrapper.appendChild(titleSpan);
+
+            // Tagit otsikon perään
+            if (Array.isArray(item.Tagit) && item.Tagit.length > 0) {
+                const tagContainer = document.createElement('span');
+                tagContainer.className = 'top-tags ms-2';
+                item.Tagit.forEach(tag => {
+                    const badge = document.createElement('span');
+                    badge.className = `badge badge-tag-${tag.tag_ID} me-1`;
+                    badge.textContent = tag.tag_Nimi;
+                    badge.style.fontSize = '0.7rem';
+                    tagContainer.appendChild(badge);
+                });
+                contentWrapper.appendChild(tagContainer);
+            }
 
             // sydän ja tykkäyslaskuri
             const heart = document.createElement('span');
@@ -56,19 +74,22 @@ async function loadTopLikes() {
                 <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 c1.74 0 3.41.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
-                <span class="like-num ms-1">${likes}</span>
+                <span class="like-num like-count ms-1" data-blog-id="${id}">${likes}</span>
             `;
 
-            // lisää otsikkolinkki ja sydän listaelementtiin
-            li.appendChild(a);
+            // lisää sisältö ja sydän listaelementtiin
+            li.appendChild(contentWrapper);
             li.appendChild(heart);
             listEl.appendChild(li);
 
-            // tekee koko listaelementistä klikattavan (navigoi samaan href:iin kuin otsikko)
+            // tekee koko listaelementistä klikattavan - avaa modaalin
             li.addEventListener('click', (event) => {
-                // ignooraa klikkaukset sydämestä tai sisemmistä linkeistä
-                if (event.target.closest('.top-heart') || event.target.closest('a')) return;
-                window.location.href = a.href;
+                // ignooraa klikkaukset sydämestä
+                if (event.target.closest('.top-heart')) return;
+                // Avaa modaali jos funktio on olemassa
+                if (typeof openBlogModal === 'function') {
+                    openBlogModal(item);
+                }
             });
             // tekee koko listaelementistä näppäin-navigoitavan
             li.addEventListener('keydown', (e) => {
@@ -76,7 +97,10 @@ async function loadTopLikes() {
                     const active = document.activeElement;
                     if (active && (active.classList && active.classList.contains('top-heart'))) return;
                     e.preventDefault();
-                    window.location.href = a.href;
+                    // Avaa modaali jos funktio on olemassa
+                    if (typeof openBlogModal === 'function') {
+                        openBlogModal(item);
+                    }
                 }
             });
         }
