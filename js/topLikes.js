@@ -45,8 +45,8 @@ async function loadTopLikes() {
 
             // Otsikko linkkinä
             const a = document.createElement('a');
-            // linkki tarkemmalle blogisivulle (blogi.html?id=ID)
-            a.href = `blogi.html?id=${encodeURIComponent(id)}`;
+            // linkki tarkemmalle blogisivulle (blogi.php?id=ID)
+            a.href = `blogi.php?id=${encodeURIComponent(id)}`;
             a.textContent = title;
 
             // sydän ja tykkäyslaskuri
