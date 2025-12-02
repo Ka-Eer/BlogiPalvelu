@@ -48,16 +48,16 @@ body {
     background-color: #1f1f1f !important;
 }
 .dark-theme .suositut {
-    background-color: rgb(75, 75, 75);
-    color: #ffffff;
+    background-color: rgb(75, 75, 75) !important;
+    color: #ffffff !important;
 }
 .dark-theme .modal-content {
-    background-color: #2c2c2c;
-    color: #e4e4e4;
+    background-color: #2c2c2c !important;
+    color: #e4e4e4 !important;
 }
 .dark-theme .card {
-    background-color: #474747;
-    color: #ffffff;
+    background-color: #474747 !important;
+    color: #ffffff !important;
 }
 
 /*Blogi kortit*/
